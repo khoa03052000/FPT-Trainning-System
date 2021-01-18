@@ -18,7 +18,7 @@ class Trainer(models.Model):
     name = models.CharField(max_length=50)
     email = models.EmailField()
     phone = models.CharField(max_length=12)
-    working_place = models.CharField(50)
+    working_place = models.CharField(max_length=50)
     type = models.CharField(max_length=2, choices=TYPE_DEPARTMENT, default='ET')
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
