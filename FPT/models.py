@@ -54,7 +54,8 @@ class Category(models.Model):
 
 class Course(models.Model):
     assigned_user_type = models.ForeignKey(
-        ContentType, on_delete=models.CASCADE, null=True, blank=True
+        ContentType, on_delete=models.CASCADE, null=True, blank=True,
+        related_name="user_type"
     )
     assigned_user_id = models.BigIntegerField(null=True, blank=True)
     assigned_user = GenericForeignKey("assigned_user_type", "assigned_user_id")
@@ -68,12 +69,8 @@ class Course(models.Model):
 
 
 class Request(models.Model):
-    user = models.ForeignKey(
-        User,
-        null=False,
-        on_delete=models.CASCADE)
-
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_request")
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="course_request")
     PENDING = 'PENDING'
     APPROVED = 'APPROVED'
     REJECTED = 'REJECTED'
