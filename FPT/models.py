@@ -59,9 +59,38 @@ class Course(models.Model):
     assigned_user_id = models.BigIntegerField(null=True, blank=True)
     assigned_user = GenericForeignKey("assigned_user_type", "assigned_user_id")
     name = models.CharField(max_length=50)
+    category = models.ManyToManyField(Category)
     description = models.TextField()
     image = models.ImageField()
     is_visible = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    category = models.ManyToManyField(Category)
+
+
+class Request(models.Model):
+    user = models.ForeignKey(
+        User,
+        null=False,
+        on_delete=models.CASCADE)
+
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    PENDING = 'PENDING'
+    APPROVED = 'APPROVED'
+    REJECTED = 'REJECTED'
+    CANCELLED = 'CANCELLED'
+    STATUS_CHOICES = (
+        (PENDING, 'Pending'),
+        (APPROVED, 'Approved'),
+        (REJECTED, 'Rejected'),
+        (CANCELLED, 'Cancelled'),
+    )
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default=PENDING,
+    )
+    email = models.EmailField(default="khoa@gmail.com")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
