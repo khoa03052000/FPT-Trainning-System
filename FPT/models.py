@@ -41,3 +41,12 @@ class Trainee(models.Model):
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class Course(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.TextField()
+    image = models.ImageField()
+    is_visible = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
