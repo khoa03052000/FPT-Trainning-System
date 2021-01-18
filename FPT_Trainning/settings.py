@@ -77,7 +77,7 @@ AUTH_USER_MODEL = "FPT.User"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'FPT',
+        'NAME': 'FPT_train',
         'USER':'postgres',
         'PASSWORD':'1234',
         'HOST':'localhost',
