@@ -1,4 +1,6 @@
 from django.contrib.auth.models import AbstractUser
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 TYPE_DEPARTMENT = [
@@ -51,6 +53,11 @@ class Category(models.Model):
 
 
 class Course(models.Model):
+    assigned_user_type = models.ForeignKey(
+        ContentType, on_delete=models.CASCADE, null=True, blank=True
+    )
+    assigned_user_id = models.BigIntegerField(null=True, blank=True)
+    assigned_user = GenericForeignKey("assigned_user_type", "assigned_user_id")
     name = models.CharField(max_length=50)
     description = models.TextField()
     image = models.ImageField()
