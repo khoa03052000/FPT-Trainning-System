@@ -1,0 +1,44 @@
+exclude: 'docs|node_modules|migrations|.git|.tox|sync|read_messages.py|process_operations.py'
+default_stages: [commit]
+fail_fast: false
+
+repos:
+  -   repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: master
+      hooks:
+        - id: trailing-whitespace
+          files: (^|/)a/.+\.(py|html|sh|css|js)$
+
+  -   repo: https://github.com/asottile/seed-isort-config
+      rev: v2.1.0
+      hooks:
+        - id: seed-isort-config
+
+  -   repo: https://github.com/timothycrosley/isort
+      rev: 4.3.21-2
+      hooks:
+        - id: isort
+          additional_dependencies: [toml]
+
+  -   repo: https://github.com/psf/black
+      rev: stable
+      hooks:
+        - id: black
+          language_version: python3.8
+  #
+  #  -   repo: https://github.com/pre-commit/mirrors-mypy
+  #      rev: v0.770
+  #      hooks:
+  #        - id: mypy
+  #          language: system
+  #          additional_dependencies:
+  #            - django-stubs
+  #            - celery
+
+  -   repo: local
+      hooks:
+        - id: flake8
+          name: flake8
+          entry: flake8
+          language: python
+          types: [python]
