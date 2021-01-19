@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from FPT import views
 
+app_name = 'FPT'
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('', include('FPT.urls')),
+    path('', include('FPT.urls', namespace='FPT')),
 ]

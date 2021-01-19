@@ -14,6 +14,7 @@ class User(AbstractUser):
     is_trainer = models.BooleanField(default=False)
     is_trainee = models.BooleanField(default=False)
     department = models.CharField(default="FPT", max_length=20)
+    avatar = models.ImageField(null=True, blank=True)
 
 
 class Trainer(models.Model):
