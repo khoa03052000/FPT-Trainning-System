@@ -54,17 +54,23 @@ class Category(models.Model):
 
 
 class Course(models.Model):
+    name = models.CharField(max_length=50)
+    category = models.ManyToManyField(Category)
+    description = models.TextField(null=True, blank=True)
+    image = models.ImageField()
+    is_visible = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class AssignUserToCourse(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="course_assign")
     assigned_user_type = models.ForeignKey(
         ContentType, on_delete=models.CASCADE, null=True, blank=True,
         related_name="user_type"
     )
     assigned_user_id = models.BigIntegerField(null=True, blank=True)
     assigned_user = GenericForeignKey("assigned_user_type", "assigned_user_id")
-    name = models.CharField(max_length=50)
-    category = models.ManyToManyField(Category)
-    description = models.TextField(null=True, blank=True)
-    image = models.ImageField()
-    is_visible = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

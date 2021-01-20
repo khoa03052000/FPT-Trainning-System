@@ -8,6 +8,7 @@ admin.site.register(Trainer)
 admin.site.register(Course)
 admin.site.register(Category)
 admin.site.register(Request)
+admin.site.register(AssignUserToCourse)
 
 
 @admin.register(User)
