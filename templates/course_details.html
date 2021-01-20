@@ -1,0 +1,68 @@
+{% extends 'layout/base_dashboard.html' %} {% load static %} {% block content %}
+<div id="content-1">
+    <div class="container-fluid">
+        <div class="d-sm-flex justify-content-between align-items-center mb-4">
+            <h3 class="text-dark mb-0">Course</h3>
+        </div>
+        <div class="row">
+            <div class="col-lg-7 col-xl-8">
+                <div class="card shadow mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="text-primary font-weight-bold m-0">Course Details</h6>
+                        <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle"
+                                data-toggle="dropdown" aria-expanded="false" type="button"><i
+                                    class="fas fa-ellipsis-v text-gray-400"></i></button>
+                            <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in">
+                                <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item"
+                                    href="#">&nbsp;Action</a><a class="dropdown-item" href="#">&nbsp;Another action</a>
+                                <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something
+                                    else here</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-6 col-md-7 col-lg-7">
+                                <h1>{{ course.name }}</h1>
+                                <p>{{ course.description }}</p><img src="{{ course.image.url }}">
+                            </div>
+                            <div class="col">
+                                <h1 style="font-size: 20;">Categories</h1>
+                                <ul class="list-group">
+                                    {% for item in course.category.all %}
+                                    <li class="list-group-item"><span>{{ item.name }}</span></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 col-xl-4">
+                <div class="card shadow mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <h6 class="text-primary font-weight-bold m-2">Course Assigned</h6>
+                                <select class="form-control">
+                                    <option>Add Assign</option>
+                                    <option>Change Assigned</option>
+                                    <option>Remove</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-area"><canvas
+                                data-bs-chart="{&quot;type&quot;:&quot;doughnut&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Trainer&quot;,&quot;Trainee&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;&quot;,&quot;backgroundColor&quot;:[&quot;#4e73df&quot;,&quot;#1cc88a&quot;],&quot;borderColor&quot;:[&quot;#ffffff&quot;,&quot;#ffffff&quot;],&quot;data&quot;:[&quot;{{ percent_trainer }}&quot;,&quot;{{ percent_trainee }}&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false,&quot;position&quot;:&quot;top&quot;},&quot;title&quot;:{&quot;display&quot;:false}}}"></canvas>
+                        </div>
+                        <div class="text-center small mt-4"><span class="mr-2"><i
+                                    class="fas fa-circle text-primary"></i>&nbsp;Trainer</span><span class="mr-2"><i
+                                    class="fas fa-circle text-success"></i>&nbsp;Trainee</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

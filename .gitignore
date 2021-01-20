@@ -326,7 +326,7 @@ tags
 
 ### Project template
 
-my_cloudfly/media/
+media/
 
 .pytest_cache/
 

@@ -13,7 +13,8 @@ TYPE_DEPARTMENT = [
 class User(AbstractUser):
     is_trainer = models.BooleanField(default=False)
     is_trainee = models.BooleanField(default=False)
-    department = models.CharField(default="HR", max_length=20)
+    department = models.CharField(default="FPT", max_length=20)
+    avatar = models.ImageField(null=True, blank=True)
 
 
 class Trainer(models.Model):
@@ -21,9 +22,9 @@ class Trainer(models.Model):
     name = models.CharField(max_length=50)
     email = models.EmailField()
     phone = models.CharField(max_length=12)
-    working_place = models.CharField(max_length=50)
+    working_place = models.CharField(max_length=50, null=True, blank=True)
     type = models.CharField(max_length=2, choices=TYPE_DEPARTMENT, default='ET')
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -35,12 +36,12 @@ class Trainee(models.Model):
     phone = models.CharField(max_length=12)
     age = models.IntegerField(default=18)
     dot = models.DateField(default="03/05/2000")
-    education = models.CharField(max_length=50)
+    education = models.CharField(max_length=50, null=True, blank=True)
     experience = models.IntegerField(default=1)
-    location = models.CharField(max_length=50)
+    location = models.CharField(max_length=50, null=True, blank=True)
     toeic_score = models.IntegerField(default=1)
-    department = models.CharField(max_length=50)
-    description = models.TextField()
+    department = models.CharField(max_length=50, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -53,17 +54,23 @@ class Category(models.Model):
 
 
 class Course(models.Model):
+    name = models.CharField(max_length=50)
+    category = models.ManyToManyField(Category)
+    description = models.TextField(null=True, blank=True)
+    image = models.ImageField()
+    is_visible = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class AssignUserToCourse(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="course_assign")
     assigned_user_type = models.ForeignKey(
         ContentType, on_delete=models.CASCADE, null=True, blank=True,
         related_name="user_type"
     )
     assigned_user_id = models.BigIntegerField(null=True, blank=True)
     assigned_user = GenericForeignKey("assigned_user_type", "assigned_user_id")
-    name = models.CharField(max_length=50)
-    category = models.ManyToManyField(Category)
-    description = models.TextField()
-    image = models.ImageField()
-    is_visible = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
