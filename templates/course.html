@@ -32,12 +32,12 @@
                                 <th class="text-center">Name</th>
                                 <th class="text-center">CATEGORIES</th>
                                 <th class="text-center">DESCRIPTION</th>
-                                <th class="text-center filter-false sorter-false">Acction</th>
+                                <th class="text-center filter-false sorter-false">Action</th>
                             </tr>
                         </thead>
                         <tbody class="text-center">
                             {% for course in courses %}
-                            <tr>
+                            <tr id="row-course-{{ course.id }}">
                                 <td>{{ course.name }}</td>
                                 <td>
                                     {% for category in course.category.all %}
@@ -53,8 +53,13 @@
                                     <a href="{% url 'FPT:course-detail' course.id %}" class="btn btn-success" role="button"
                                         style="background: rgb(11,171,56);margin: 2px;"><i
                                             class="fas fa-pencil-alt"></i></a>
-                                    <a class="btn btn-danger" role="button" style="margin: 2px;"><i
-                                            class="fas fa-trash"></i></a>
+                                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" id="token">
+                                    <a class="btn btn-danger" role="button" style="margin: 2px;" ic-confirm="Are you sure ?" ic-action="remove" ic-target="#row-course-{{ course.id }}" ic-include="#token" ic-delete-from="{% url 'FPT:delete_course' course.id %}"  >
+                                        <i
+
+                                            class="fas fa-trash"></i>
+
+                                    </a>
                                 </td>
                             </tr>
                             {% endfor %}

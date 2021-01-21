@@ -1,0 +1,22 @@
+<div class="row register-form" id="form-course-update">
+    <div class="col-md-8 offset-md-2">
+        <form class="custom-form" action="{% url 'FPT:update_course' course.id %}" method="post"  enctype="multipart/form-data">
+            {% csrf_token %}
+            <h1>Course Form</h1>
+            {% for field in upload_form %}
+                <div class="form-row form-group">
+                    <div class="col-sm-4 label-column">
+                        <label class="col-form-label" for="name-input-field">{{field.label}} </label>
+                    </div>
+                    <div class="col-sm-6 input-column">
+                        {{ field}}
+                    </div>
+                </div>
+            {% endfor %}
+        <br>
+            <button class="btn btn-light submit-button" type="submit">Save</button>
+        <br>
+        <button class="btn btn-danger submit-button" type="submit" ic-action="remove" ic-target="#form-course-update">Back</button>
+        </form>
+    </div>
+</div>

@@ -12,6 +12,8 @@ urlpatterns = [
     path('courses/', views.manage_courses, name='courses'),
     path('create-course/', views.create_course, name='create-course'),
     path('course-detail/<int:course_id>/', views.course_detail, name='course-detail'),
+    path('update-course/<int:course_id>/', views.update_course, name='update_course'),
+    path('delete-course/<int:course_id>/', views.delete_course, name='delete_course'),
 
     # Category
     path('categories/', views.manage_categories, name='categories'),

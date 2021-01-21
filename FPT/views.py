@@ -4,7 +4,7 @@ from django.views.decorators.http import require_GET, require_http_methods
 
 from .forms import CourseCreate, CategoryCreate
 from .models import Course, Trainer, Trainee, User, Request, Category, AssignUserToCourse
-from django.http import HttpResponse
+from django.http import HttpResponse, response
 from django.views.generic import ListView
 from django.db.models import Q
 
@@ -85,31 +85,52 @@ def course_detail(request, course_id):
         if user.assigned_user_type.id == trainee_type.id:
             trainees.append(user.assigned_user)
 
-    count = len(trainees) + len(trainers)
-    percent_trainer = (len(trainers) / count) * 100
-    percent_trainee = (len(trainees) / count) * 100
     context = {
         "course": course,
         "trainers": trainers,
         "trainees": trainees,
-        "percent_trainer": percent_trainer,
-        "percent_trainee": percent_trainee,
     }
+    count = len(trainees) + len(trainers)
+    if count > 0:
+        percent_trainer = (len(trainers) / count) * 100
+        percent_trainee = (len(trainees) / count) * 100
+        context["percent_trainer"] = percent_trainer
+        context["percent_trainee"] = percent_trainee
     return render(request, 'course_details.html', context)
 
 
-@require_http_methods(["GET", "PUT"])
+@require_http_methods(["GET", "POST"])
 def update_course(request, course_id):
     course_id = int(course_id)
     try:
-        course = Course.objects.get(id=course_id)
+        course_self = Course.objects.get(id=course_id)
     except Course.DoesNotExist:
         return redirect("FPT:courses")
-    course_form = CourseCreate(request.POST, request.FILES, instance=course)
-    if course_form.is_valid():
-        course_form.save()
-        return redirect("FPT:courses")
-    return render(request, 'course_create.html', {'upload_form': course_form})
+    if request.method == 'GET':
+        course_form = CourseCreate()
+        context = {
+            'upload_form': course_form,
+            'course': course_self
+        }
+        return render(request, 'course_update.html', context)
+    if request.method == 'POST':
+        course_form = CourseCreate(request.POST, request.FILES, instance=course_self)
+        if course_form.is_valid():
+            course_form.save()
+            return redirect("FPT:course-detail", course_id=course_self.id)
+
+
+@require_http_methods(["POST", "GET"])
+def delete_course(request, course_id):
+    course_id = int(course_id)
+    try:
+        course_self = Course.objects.get(id=course_id)
+    except Course.DoesNotExist:
+        return redirect('FPT:courses')
+    course_self.delete()
+    if request.method == "POST":
+        return HttpResponse(status=204)
+    return redirect("FPT:courses")
 
 
 @require_http_methods(["GET", "PUT", "DELETE"])
@@ -148,16 +169,22 @@ def category_detail(request, category_id):
     return render(request, 'category_detail.html', context)
 
 
-@require_http_methods(["GET", "PUT"])
+@require_http_methods(["GET", "POST"])
 def update_category(request, category_id):
     category_id = int(category_id)
     try:
         category_self = Category.objects.get(id=category_id)
     except Category.DoesNotExist:
         return redirect("FPT:category-detail")
-    if request.method == "PUT":
+    if request.method == 'GET':
+        category_form = CategoryCreate()
+        context = {
+            'upload_form': category_form,
+            'category': category_self
+        }
+        return render(request, 'category_update.html', context)
+    if request.method == 'POST':
         category_form = CategoryCreate(request.POST, instance=category_self)
         if category_form.is_valid():
             category_form.save()
-            return redirect("FPT:category-detail")
-    return render(request, 'category_create.html', {'upload_form': category_form})
+            return redirect("FPT:category-detail", category_id=category_self.id)

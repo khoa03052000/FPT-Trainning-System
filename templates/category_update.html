@@ -1,4 +1,4 @@
- <form class="form-inline" action="{% url 'FPT:update_category' category.id %}" method="PUT">
+ <form class="form" action="{% url 'FPT:update_category' category.id %}" method="POST">
     <div class="form-group">
         <h6 class="text-primary font-weight-bold m-2">Update Category</h6>
         {% csrf_token %}
@@ -12,6 +12,7 @@
                 </div>
             </div>
         {% endfor %}
+    <br>
         <button class="btn btn-light submit-button" type="submit">Save</button>
     </div>
 </form>
