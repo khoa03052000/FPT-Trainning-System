@@ -54,7 +54,7 @@
                                         style="background: rgb(11,171,56);margin: 2px;"><i
                                             class="fas fa-pencil-alt"></i></a>
                                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" id="token">
-                                    <a class="btn btn-danger" role="button" style="margin: 2px;" ic-confirm="Are you sure ?" ic-action="remove" ic-target="#row-course-{{ course.id }}" ic-include="#token" ic-delete-from="{% url 'FPT:delete_course' course.id %}"  >
+                                    <a class="btn btn-danger" role="button" style="margin: 2px;" ic-confirm="Are you sure ?" ic-action="remove" ic-target="#row-course-{{ course.id }}" ic-include="#token" ic-delete-from="{% url 'FPT:delete-course' course.id %}"  >
                                         <i
 
                                             class="fas fa-trash"></i>

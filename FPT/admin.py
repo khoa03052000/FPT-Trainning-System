@@ -20,9 +20,10 @@ class UserAdmin(auth_admin.UserAdmin):
                 "fields": (
                     "is_trainer",
                     "is_trainee",
-                    "avatar"
+                    "avatar",
+                    "full_name"
                 )
             },
         ),
     ) + auth_admin.UserAdmin.fieldsets
-    list_display = ["username", "is_superuser", "is_staff", "is_trainer", "is_trainee"]
+    list_display = ["username", "full_name", "is_superuser", "is_staff", "is_trainer", "is_trainee"]

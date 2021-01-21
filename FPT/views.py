@@ -133,6 +133,35 @@ def delete_course(request, course_id):
     return redirect("FPT:courses")
 
 
+@require_http_methods(["GET"])
+def assign_course(request, course_id):
+    course_id = int(course_id)
+    try:
+        course = Course.objects.get(id=course_id)
+    except Course.DoesNotExist:
+        return redirect("FPT:courses")
+
+    assign_user = AssignUserToCourse.objects.filter(course__id=course_id)
+
+    trainer_type = ContentType.objects.get_for_model(Trainer)
+    trainee_type = ContentType.objects.get_for_model(Trainee)
+
+    trainers = []
+    trainees = []
+
+    for user in assign_user:
+        if user.assigned_user_type.id == trainer_type.id:
+            trainers.append(user.assigned_user)
+        if user.assigned_user_type.id == trainee_type.id:
+            trainees.append(user.assigned_user)
+    context = {
+        "course": course,
+        "trainers": trainers,
+        "trainees": trainees
+    }
+    return render(request, "assign.html", context)
+
+
 @require_http_methods(["GET", "PUT", "DELETE"])
 def manage_categories(request):
     categories = Category.objects.all()

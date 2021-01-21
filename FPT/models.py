@@ -15,33 +15,33 @@ class User(AbstractUser):
     is_trainee = models.BooleanField(default=False)
     department = models.CharField(default="FPT", max_length=20)
     avatar = models.ImageField(null=True, blank=True)
+    full_name = models.CharField(max_length=50, blank=True)
+
+    def save(self, *args, **kwargs):
+        if len(self.full_name) == 0:
+            self.full_name = self.last_name + self.first_name
+        return super().save(*args, **kwargs)
 
 
 class Trainer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    name = models.CharField(max_length=50)
-    email = models.EmailField()
+    education = models.CharField(max_length=50, default="", blank=True)
     phone = models.CharField(max_length=12)
-    working_place = models.CharField(max_length=50, null=True, blank=True)
+    working_place = models.CharField(max_length=50, default="", blank=True)
     type = models.CharField(max_length=2, choices=TYPE_DEPARTMENT, default='ET')
-    description = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
 
 class Trainee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    name = models.CharField(max_length=50)
-    email = models.EmailField(default="khoa@gmail.com")
-    phone = models.CharField(max_length=12)
+    phone = models.CharField(max_length=12, default="09xx", blank=True)
     age = models.IntegerField(default=18)
     dot = models.DateField(default="03/05/2000")
-    education = models.CharField(max_length=50, null=True, blank=True)
+    education = models.CharField(max_length=50, default="FPT Education", blank=True)
     experience = models.IntegerField(default=1)
-    location = models.CharField(max_length=50, null=True, blank=True)
-    toeic_score = models.IntegerField(default=1)
-    department = models.CharField(max_length=50, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
+    location = models.CharField(max_length=50, default="Da Nang", blank=True)
+    toeic_score = models.IntegerField(default=5)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -55,7 +55,7 @@ class Category(models.Model):
 
 class Course(models.Model):
     name = models.CharField(max_length=50)
-    category = models.ManyToManyField(Category)
+    category = models.ManyToManyField(Category, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     image = models.ImageField()
     is_visible = models.BooleanField(default=True)
