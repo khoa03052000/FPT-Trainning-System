@@ -1,0 +1,18 @@
+ <form class="form" action="{% url 'FPT:update_category' category.id %}" method="POST">
+    <div class="form-group">
+        <h6 class="text-primary font-weight-bold m-2">Update Category</h6>
+        {% csrf_token %}
+        {% for field in upload_form %}
+            <div class="form-row form-group">
+                <div class="col-sm-4 label-column">
+                    <label class="col-form-label" for="name-input-field">{{field.label}} </label>
+                </div>
+                <div class="col-sm-6 input-column">
+                    {{ field }}
+                </div>
+            </div>
+        {% endfor %}
+    <br>
+        <button class="btn btn-light submit-button" type="submit">Save</button>
+    </div>
+</form>

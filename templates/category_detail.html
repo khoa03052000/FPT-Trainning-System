@@ -1,0 +1,49 @@
+{% extends 'layout/base_dashboard.html' %} {% load static %} {% block content %}
+<div id="content-1">
+    <div class="container-fluid">
+        <div class="d-sm-flex justify-content-between align-items-center mb-4">
+            <h3 class="text-dark mb-0">Category</h3>
+        </div>
+        <div class="row">
+            <div class="col-lg-7 col-xl-8">
+                <div class="card shadow mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="text-primary font-weight-bold m-0">{{ category.name}} - Details</h6>
+                        <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle"
+                                data-toggle="dropdown" aria-expanded="false" type="button"><i
+                                    class="fas fa-ellipsis-v text-gray-400"></i></button>
+                            <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in">
+                                <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item"
+                                    href="#">&nbsp;Action</a><a class="dropdown-item" href="#">&nbsp;Another action</a>
+                                <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something
+                                    else here</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-6 col-md-7 col-lg-7">
+                                <h1>Name</h1>
+                                <p>{{ category.name }}</p>
+                            </div>
+                            <div class="col">
+                                <h1 style="font-size: 20;">Description</h1>
+                                    <p>{{ category.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 col-xl-4">
+                <div class="card shadow mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center" id="update-category">
+                      <button class="btn btn-default" ic-get-from="{% url 'FPT:update_category' category.id %}" ic-replace-target="true">
+                        Update Category <i class="fa fa-spinner fa-spin ic-indicator" style="display:none"></i>
+                      </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
