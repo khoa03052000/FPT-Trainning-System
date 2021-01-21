@@ -9240,8 +9240,8 @@ a:focus {
 }
 .sidebar .nav-item .nav-link .img-profile,
 .topbar .nav-item .nav-link .img-profile {
-  height: 4rem;
-  width: 4rem;
+  height: 3rem;
+  width: 3rem;
 }
 .dropdown .dropdown-toggle {
   position: relative;

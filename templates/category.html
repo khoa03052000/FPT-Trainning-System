@@ -2,17 +2,17 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12 col-sm-6 col-md-6">
-            <h3 class="text-dark mb-4">Courses Manage</h3>
+            <h3 class="text-dark mb-4">Category Manage</h3>
         </div>
         <div class="col-12 col-sm-6 col-md-6 text-right" style="margin-bottom: 30px;">
-            <a class="btn btn-primary" href="{% url 'FPT:create-course' %}" role="button"><i class="fa fa-plus"></i>&nbsp;Add Course</a>
+            <a class="btn btn-primary" href="{% url 'FPT:create-category' %}" role="button"><i class="fa fa-plus"></i>&nbsp;Add Category</a>
         </div>
     </div>
     <div class="card" id="TableSorterCard">
         <div class="card-header py-3">
             <div class="row table-topper align-items-center">
                 <div class="col-12 col-sm-5 col-md-6 text-left" style="margin: 0px;padding: 5px 15px;">
-                    <p class="text-primary m-0 font-weight-bold">List Courses</p>
+                    <p class="text-primary m-0 font-weight-bold">List Category</p>
                 </div>
                 <div class="col-12 col-sm-7 col-md-6 text-right" style="margin: 0px;padding: 5px 15px;">
                     <button class="btn btn-primary btn-sm reset" type="button" style="margin: 2px;">Sort</button><button
@@ -30,36 +30,23 @@
                         <thead class="thead-dark">
                             <tr>
                                 <th class="text-center">Name</th>
-                                <th class="text-center">CATEGORIES</th>
                                 <th class="text-center">DESCRIPTION</th>
-                                <th class="text-center filter-false sorter-false">Action</th>
+                                <th class="text-center filter-false sorter-false">Acction</th>
                             </tr>
                         </thead>
                         <tbody class="text-center">
-                            {% for course in courses %}
-                            <tr id="row-course-{{ course.id }}">
-                                <td>{{ course.name }}</td>
-                                <td>
-                                    {% for category in course.category.all %}
-                                    {{ category.name }},
-                                    {% endfor %}
-                                    </p>
-
-                                </td>
-                                <td>{{ course.description }}</td>
+                            {% for category in categories %}
+                            <tr>
+                                <td>{{ category.name }}</td>
+                                <td>{{ category.description }}</td>
                                 <td class="text-center">
                                     <a class="btn btn-primary" role="button" style="margin: 2px;"><i
                                             class="far fa-eye"></i></a>
-                                    <a href="{% url 'FPT:course-detail' course.id %}" class="btn btn-success" role="button"
+                                    <a href="{% url 'FPT:category-detail' category.id %}" class="btn btn-success" role="button"
                                         style="background: rgb(11,171,56);margin: 2px;"><i
                                             class="fas fa-pencil-alt"></i></a>
-                                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" id="token">
-                                    <a class="btn btn-danger" role="button" style="margin: 2px;" ic-confirm="Are you sure ?" ic-action="remove" ic-target="#row-course-{{ course.id }}" ic-include="#token" ic-delete-from="{% url 'FPT:delete-course' course.id %}"  >
-                                        <i
-
-                                            class="fas fa-trash"></i>
-
-                                    </a>
+                                    <a class="btn btn-danger" role="button" style="margin: 2px;"><i
+                                            class="fas fa-trash"></i></a>
                                 </td>
                             </tr>
                             {% endfor %}
