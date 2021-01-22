@@ -24,20 +24,20 @@ urlpatterns = [
 
     path('courses/assign-course/<int:course_id>/add-trainers/', views.add_trainers_assign, name='add-trainers-assign'),
     # path('courses/assign-course/<int:course_id>/change-trainers/', views.change_trainers_assign, name='change-trainers-assign'),
-    # path('courses/assign-course/<int:course_id>/change-trainers/remove-trainers/<int:trainer_id>/', views.remove_trainer, name='remove-trainer'),
-    #
-    # # Trainee Assign
-    #
-    # path('courses/assign-course/<int:course_id>/add-trainees/', views.add_trainees_assign, name='add-trainees-assign'),
+    path('courses/assign-course/<int:course_id>/change-trainers/remove-trainers/<int:trainer_id>/', views.remove_assign_trainer, name='remove-assign-trainer'),
+
+    # Trainee Assign
+
+    path('courses/assign-course/<int:course_id>/add-trainees/', views.add_trainees_assign, name='add-trainees-assign'),
     # path('courses/assign-course/<int:course_id>/change-trainees/', views.change_trainees_assign, name='change-trainees-assign'),
-    # path('courses/assign-course/<int:course_id>/change-trainers/remove-trainees/<int:trainee_id>/', views.remove_trainee, name='remove-trainee'),
+    path('courses/assign-course/<int:course_id>/change-trainees/remove-trainees/<int:trainee_id>/', views.remove_assign_trainee, name='remove-assign-trainee'),
 
     # Category
     path('categories/', views.manage_categories, name='categories'),
     path('categories/create-category/', views.create_category, name='create-category'),
     path('categories/category-detail/<int:category_id>/', views.category_detail, name='category-detail'),
     path('categories/update-category/<int:category_id>/', views.update_category, name='update-category'),
-    # path('categories/delete-category/<int:category_id>/', views.delete_category, name='delete-category'),
+    path('categories/delete-category/<int:category_id>/', views.delete_category, name='delete-category'),
     # User
     path('register/', views.get_dashboard, name='register'),
     path('account-manage/', views.get_dashboard, name='account-manage'),

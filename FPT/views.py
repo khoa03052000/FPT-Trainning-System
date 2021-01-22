@@ -170,16 +170,17 @@ def add_trainers_assign(request, course_id):
     except Course.DoesNotExist:
         return redirect('FPT:courses')
     # Get info Course Assign and Type User
+    trainer_type = ContentType.objects.get_for_model(Trainer)
+    course_assign = AssignUserToCourse.objects.filter(course=course_self, assigned_user_type=trainer_type)
 
+    # Check Trainer assigned in Course
+    list_trainer_id_assigned = []
+    for item in course_assign:
+        list_trainer_id_assigned.append(item.assigned_user_id)
+    if list_trainer_id_assigned > 3:
+        return redirect('FPT:assign-course', course_id=course_id)
     # Handler Create List Trainers
     if request.method == "POST":
-        trainer_type = ContentType.objects.get_for_model(Trainer)
-        course_assign = AssignUserToCourse.objects.filter(course=course_self, assigned_user_type=trainer_type)
-
-        # Check Trainer assigned in Course
-        list_trainer_id_assigned = []
-        for item in course_assign:
-            list_trainer_id_assigned.append(item.assigned_user_id)
 
         trainers_id_list = request.POST.getlist('list-trainers')
         for i in range(0, len(trainers_id_list)):
@@ -198,7 +199,7 @@ def add_trainers_assign(request, course_id):
         AssignUserToCourse.objects.bulk_create(list_assign_trainers)
         return redirect('FPT:assign-course', course_id=course_id)
 
-    trainers = Trainer.objects.all()
+    trainers = Trainer.objects.exclude(pk__in=list_trainer_id_assigned)
     context = {
         "trainers": trainers,
         "course": course_self
@@ -206,7 +207,80 @@ def add_trainers_assign(request, course_id):
     return render(request, "assign-trainer.html", context)
 
 
-@require_http_methods(["GET", "PUT", "DELETE"])
+@require_http_methods(["POST"])
+def remove_assign_trainer(request, course_id, trainer_id):
+    trainer_id = int(trainer_id)
+    course_id = int(course_id)
+    try:
+        course_assign = AssignUserToCourse.objects.get(
+            course__id=course_id,
+            assigned_user_id=trainer_id
+        )
+    except AssignUserToCourse.DoesNotExist:
+        return redirect('FPT:assign-course')
+    course_assign.delete()
+    return HttpResponse(status=204)
+
+
+# Add Trainee Assign
+@require_http_methods(["GET", "POST"])
+def add_trainees_assign(request, course_id):
+    course_id = int(course_id)
+    try:
+        course_self = Course.objects.get(id=course_id)
+    except Course.DoesNotExist:
+        return redirect('FPT:courses')
+    # Get info Course Assign and Type User
+    trainee_type = ContentType.objects.get_for_model(Trainee)
+    course_assign = AssignUserToCourse.objects.filter(course=course_self, assigned_user_type=trainee_type)
+
+    # Check Trainee assigned in Course
+    list_trainee_id_assigned = []
+    for item in course_assign:
+        list_trainee_id_assigned.append(item.assigned_user_id)
+    trainees = Trainee.objects.exclude(pk__in=list_trainee_id_assigned)
+    # Handler Create List Trainees
+    if request.method == "POST":
+
+        trainees_id_list = request.POST.getlist('list-trainees')
+        for i in range(0, len(trainees_id_list)):
+            trainees_id_list[i] = int(trainees_id_list[i])
+
+        check_trainee_id_list = [trainee_id for trainee_id in trainees_id_list if (trainee_id not in list_trainee_id_assigned)]
+
+        list_assign_trainees = [
+            AssignUserToCourse(
+                assigned_user_id=trainee_id,
+                course=course_self,
+                assigned_user_type=trainee_type
+            )
+            for trainee_id in check_trainee_id_list
+        ]
+        AssignUserToCourse.objects.bulk_create(list_assign_trainees)
+        return redirect('FPT:assign-course', course_id=course_id)
+    context = {
+        "trainees": trainees,
+        "course": course_self
+    }
+    return render(request, "assign-trainee.html", context)
+
+
+@require_http_methods(["POST"])
+def remove_assign_trainee(request, course_id, trainee_id):
+    trainee_id = int(trainee_id)
+    course_id = int(course_id)
+    try:
+        course_assign = AssignUserToCourse.objects.get(
+            course__id=course_id,
+            assigned_user_id=trainee_id
+        )
+    except AssignUserToCourse.DoesNotExist:
+        return redirect('FPT:assign-course')
+    course_assign.delete()
+    return HttpResponse(status=204)
+
+
+@require_http_methods(["GET"])
 def manage_categories(request):
     categories = Category.objects.all()
     context = {
@@ -261,3 +335,16 @@ def update_category(request, category_id):
         if category_form.is_valid():
             category_form.save()
             return redirect("FPT:category-detail", category_id=category_self.id)
+
+
+@require_http_methods(["GET", "POST"])
+def delete_category(request, category_id):
+    category_id = int(category_id)
+    try:
+        category_self = Category.objects.get(id=category_id)
+    except Course.DoesNotExist:
+        return redirect('FPT:categories')
+    category_self.delete()
+    if request.method == "POST":
+        return HttpResponse(status=204)
+    return redirect("FPT:categories")

@@ -31,12 +31,12 @@
                             <tr>
                                 <th class="text-center">Name</th>
                                 <th class="text-center">DESCRIPTION</th>
-                                <th class="text-center filter-false sorter-false">Acction</th>
+                                <th class="text-center filter-false sorter-false">Action</th>
                             </tr>
                         </thead>
-                        <tbody class="text-center">
+                        <tbody class="text-center" ic-confirm="Are you sure?">
                             {% for category in categories %}
-                            <tr>
+                            <tr id="category-{{ category.id }}">
                                 <td>{{ category.name }}</td>
                                 <td>{{ category.description }}</td>
                                 <td class="text-center">
@@ -44,9 +44,15 @@
                                             class="far fa-eye"></i></a>
                                     <a href="{% url 'FPT:category-detail' category.id %}" class="btn btn-success" role="button"
                                         style="background: rgb(11,171,56);margin: 2px;"><i
-                                            class="fas fa-pencil-alt"></i></a>
-                                    <a class="btn btn-danger" role="button" style="margin: 2px;"><i
-                                            class="fas fa-trash"></i></a>
+                                            class="fas fa-pencil-alt"></i>
+                                    </a>
+                                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" id="token-category">
+                                    <a class="btn btn-danger" role="button" style="margin: 2px;"  ic-action="remove" ic-target="#category-{{ category.id }}" ic-include="#token-category" ic-delete-from="{% url 'FPT:delete-category' category.id %}"  >
+                                        <i
+
+                                            class="fas fa-trash"></i>
+
+                                    </a>
                                 </td>
                             </tr>
                             {% endfor %}
