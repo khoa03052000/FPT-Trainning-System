@@ -150,9 +150,9 @@ def assign_course(request, course_id):
     trainees = []
 
     for user in assign_user:
-        if user.assigned_user_type.id == trainer_type.id:
+        if user.assigned_user_type_id == trainer_type.id:
             trainers.append(user.assigned_user)
-        if user.assigned_user_type.id == trainee_type.id:
+        if user.assigned_user_type_id == trainee_type.id:
             trainees.append(user.assigned_user)
     context = {
         "course": course,
@@ -160,6 +160,50 @@ def assign_course(request, course_id):
         "trainees": trainees
     }
     return render(request, "assign.html", context)
+
+
+@require_http_methods(["GET", "POST"])
+def add_trainers_assign(request, course_id):
+    course_id = int(course_id)
+    try:
+        course_self = Course.objects.get(id=course_id)
+    except Course.DoesNotExist:
+        return redirect('FPT:courses')
+    # Get info Course Assign and Type User
+
+    # Handler Create List Trainers
+    if request.method == "POST":
+        trainer_type = ContentType.objects.get_for_model(Trainer)
+        course_assign = AssignUserToCourse.objects.filter(course=course_self, assigned_user_type=trainer_type)
+
+        # Check Trainer assigned in Course
+        list_trainer_id_assigned = []
+        for item in course_assign:
+            list_trainer_id_assigned.append(item.assigned_user_id)
+
+        trainers_id_list = request.POST.getlist('list-trainers')
+        for i in range(0, len(trainers_id_list)):
+            trainers_id_list[i] = int(trainers_id_list[i])
+
+        check_trainers_id_list = [trainer_id for trainer_id in trainers_id_list if (trainer_id not in list_trainer_id_assigned)]
+
+        list_assign_trainers = [
+            AssignUserToCourse(
+                assigned_user_id=int(trainer_id),
+                course=course_self,
+                assigned_user_type=trainer_type
+            )
+            for trainer_id in check_trainers_id_list
+        ]
+        AssignUserToCourse.objects.bulk_create(list_assign_trainers)
+        return redirect('FPT:assign-course', course_id=course_id)
+
+    trainers = Trainer.objects.all()
+    context = {
+        "trainers": trainers,
+        "course": course_self
+    }
+    return render(request, "assign-trainer.html", context)
 
 
 @require_http_methods(["GET", "PUT", "DELETE"])
