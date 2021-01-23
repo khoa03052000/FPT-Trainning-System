@@ -6,7 +6,7 @@
     <div class="col-md-8 offset-md-2">
         <div class="alert alert-success" role="alert" id="save-sucess" style="background-color: #B4F7D2!important; border: 1px solid #0C6D38;"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><i class="icon ion-checkmark-round mr-1"></i><span style="color: #0C6D38 !important;">Create Course successfully<br></span></div>
         <div class="alert alert-success" role="alert" id="save-sucess-1" style="border: 1px solid #0C6D38;background: var(--danger);"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><i class="icon ion-close mr-1"></i><span style="color: #0C6D38 !important;">Can't not create course<br></span></div>
-        <form class="custom-form" action="{% url 'FPT:create_category' %}" method="POST">
+        <form class="custom-form" action="{% url 'FPT:create-category' %}" method="POST">
             {% csrf_token %}
             <h1>Category Form</h1>
             {% for field in upload_form %}

@@ -1,0 +1,75 @@
+{% extends 'layout/base_dashboard.html' %} {% load static %} {% block content %}
+<div class="container-fluid" id="course-assign-div">
+  <div class="row">
+    <div class="col-12 col-sm-6 col-md-6">
+      <h3 class="text-dark mb-4">Add Trainer Assign</h3>
+    </div>
+  </div>
+  <div class="card" id="TableSorterCard-Trainer">
+    <div class="card-header py-3">
+      <div class="row table-topper align-items-center">
+        <div
+          class="col-12 col-sm-5 col-md-6 text-left"
+          style="margin: 0px; padding: 5px 15px"
+        >
+          <p class="text-primary m-0 font-weight-bold">List Trainer Assign</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table
+              class="table table-striped table tablesorter"
+              id="trainer-assign-table"
+            >
+              <thead class="thead-dark">
+                <tr>
+                  <th class="text-center">Select</th>
+                  <th class="text-center">Name</th>
+                  <th class="text-center">EMAIL</th>
+                  <th class="text-center">Phone</th>
+                  <th class="text-center">Working Place</th>
+                  <th class="text-center">TYPE</th>
+                </tr>
+              </thead>
+                <tbody class="text-center">
+                  <form action="{% url 'FPT:add-trainers-assign' course.id %}" method="POST">
+                    {% csrf_token %}
+                    {% for trainer in trainers %}
+                    <tr>
+                        <td>
+                          <div class="custom-control custom-checkbox">
+                            <input
+                              type="checkbox"
+                              class="custom-control-input"
+                              name ="list-trainers"
+                              id="trainer-check-{{ trainer.user_id }}"
+                              value="{{ trainer.user_id }}"
+                            />
+                            <label class="custom-control-label" for="trainer-check-{{ trainer.user_id }}">
+                                ID-{{ trainer.user_id }}
+                            </label>
+                          </div>
+                        </td>
+                        <td>{{ trainer.user.full_name }}</td>
+                        <td>{{ trainer.user.email }}</td>
+                        <td>{{ trainer.phone }}</td>
+                        <td>{{ trainer.working_place }}</td>
+                        <td>{{ trainer.type }}</td>
+                    </tr>
+                  {% endfor %}
+                  <div class="col-12 col-sm-7 col-md-6 text-right" style="margin: 0px; padding: 5px 15px">
+                  <button class="btn btn-primary btn-sm reset" type="submit" style="margin: 20px">
+                    Submit Add Trainers
+                  </button>
+                </div>
+              </form>
+                </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock %}
+</div>
