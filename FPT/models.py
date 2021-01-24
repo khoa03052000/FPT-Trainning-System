@@ -26,7 +26,7 @@ class User(AbstractUser):
 class Trainer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     education = models.CharField(max_length=50, default="", blank=True)
-    phone = models.CharField(max_length=12)
+    phone = models.CharField(max_length=12, default="", blank=True)
     working_place = models.CharField(max_length=50, default="", blank=True)
     type = models.CharField(max_length=2, choices=TYPE_DEPARTMENT, default='ET')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -36,28 +36,28 @@ class Trainer(models.Model):
 class Trainee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     phone = models.CharField(max_length=12, default="09xx", blank=True)
-    age = models.IntegerField(default=18)
-    dot = models.DateField(default="03/05/2000")
+    age = models.IntegerField(default=18, blank=True)
+    dot = models.DateField(default="03/05/2000", blank=True)
     education = models.CharField(max_length=50, default="FPT Education", blank=True)
-    experience = models.IntegerField(default=1)
+    experience = models.IntegerField(default=1, blank=True)
     location = models.CharField(max_length=50, default="Da Nang", blank=True)
-    toeic_score = models.IntegerField(default=5)
+    toeic_score = models.IntegerField(default=5, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=50)
-    description = models.TextField()
+    name = models.CharField(max_length=50, blank=True)
+    description = models.TextField(default="", blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
 
 class Course(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, default="", blank=True)
     category = models.ManyToManyField(Category, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    image = models.ImageField()
+    image = models.ImageField(null=True, blank=True)
     is_visible = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

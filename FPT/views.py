@@ -1,8 +1,8 @@
 from django.contrib.contenttypes.models import ContentType
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_GET, require_http_methods
 
-from .forms import CourseCreate, CategoryCreate
+from .forms import CourseCreate, CategoryCreate, AssignCourseCreate
 from .models import Course, Trainer, Trainee, User, Request, Category, AssignUserToCourse
 from django.http import HttpResponse, response
 from django.views.generic import ListView
@@ -38,6 +38,7 @@ def get_dashboard(request):
     return render(request, 'index.html', context=context)
 
 
+# Manage Course
 @require_http_methods(["GET"])
 def manage_courses(request):
     user = request.user
@@ -76,14 +77,16 @@ def course_detail(request, course_id):
     trainer_type = ContentType.objects.get_for_model(Trainer)
     trainee_type = ContentType.objects.get_for_model(Trainee)
 
-    trainers = []
-    trainees = []
-
-    for user in assign_user:
-        if user.assigned_user_type.id == trainer_type.id:
-            trainers.append(user.assigned_user)
-        if user.assigned_user_type.id == trainee_type.id:
-            trainees.append(user.assigned_user)
+    trainers = [
+        u.assigned_user
+        for u in assign_user
+        if(u.assigned_user_type_id == trainer_type.id)
+    ]
+    trainees = [
+        u.assigned_user
+        for u in assign_user
+        if(u.assigned_user_type_id == trainee_type.id)
+    ]
 
     context = {
         "course": course,
@@ -146,14 +149,17 @@ def assign_course(request, course_id):
     trainer_type = ContentType.objects.get_for_model(Trainer)
     trainee_type = ContentType.objects.get_for_model(Trainee)
 
-    trainers = []
-    trainees = []
+    trainers = [
+        u.assigned_user
+        for u in assign_user
+        if(u.assigned_user_type_id == trainer_type.id)
+    ]
+    trainees = [
+        u.assigned_user
+        for u in assign_user
+        if(u.assigned_user_type_id == trainee_type.id)
+    ]
 
-    for user in assign_user:
-        if user.assigned_user_type_id == trainer_type.id:
-            trainers.append(user.assigned_user)
-        if user.assigned_user_type_id == trainee_type.id:
-            trainees.append(user.assigned_user)
     context = {
         "course": course,
         "trainers": trainers,
@@ -162,6 +168,7 @@ def assign_course(request, course_id):
     return render(request, "assign.html", context)
 
 
+# Add Assign Trainer
 @require_http_methods(["GET", "POST"])
 def add_trainers_assign(request, course_id):
     course_id = int(course_id)
@@ -174,11 +181,10 @@ def add_trainers_assign(request, course_id):
     course_assign = AssignUserToCourse.objects.filter(course=course_self, assigned_user_type=trainer_type)
 
     # Check Trainer assigned in Course
-    list_trainer_id_assigned = []
-    for item in course_assign:
-        list_trainer_id_assigned.append(item.assigned_user_id)
-    if list_trainer_id_assigned > 3:
+    list_trainer_id_assigned = [i.assigned_user_id for i in course_assign]
+    if len(list_trainer_id_assigned) > 3:
         return redirect('FPT:assign-course', course_id=course_id)
+
     # Handler Create List Trainers
     if request.method == "POST":
 
@@ -235,9 +241,8 @@ def add_trainees_assign(request, course_id):
     course_assign = AssignUserToCourse.objects.filter(course=course_self, assigned_user_type=trainee_type)
 
     # Check Trainee assigned in Course
-    list_trainee_id_assigned = []
-    for item in course_assign:
-        list_trainee_id_assigned.append(item.assigned_user_id)
+    list_trainee_id_assigned = [i.assigned_user_id for i in course_assign]
+
     trainees = Trainee.objects.exclude(pk__in=list_trainee_id_assigned)
     # Handler Create List Trainees
     if request.method == "POST":
@@ -280,6 +285,86 @@ def remove_assign_trainee(request, course_id, trainee_id):
     return HttpResponse(status=204)
 
 
+@require_http_methods(["GET"])
+def manage_assign(request):
+    trainer_type = ContentType.objects.get_for_model(Trainer)
+    trainee_type = ContentType.objects.get_for_model(Trainee)
+
+    trainers_assigned = AssignUserToCourse.objects.filter(assigned_user_type=trainer_type)
+    trainees_assigned = AssignUserToCourse.objects.filter(assigned_user_type=trainee_type)
+    
+    list_trainers_id = [i.assigned_user_id for i in trainers_assigned]
+    list_trainees_id = [i.assigned_user_id for i in trainees_assigned]
+
+    trainers = Trainer.objects.filter(pk__in=list_trainers_id)
+    trainees = Trainee.objects.filter(pk__in=list_trainees_id)
+
+    context = {
+        "trainers": trainers,
+        "trainees": trainees,
+    }
+    return render(request, "manage-assign-user.html", context)
+
+
+@require_http_methods(["GET", "POST"])
+def change_trainer_assign(request, trainer_id):
+    trainer_id = int(trainer_id)
+    trainer = Trainer.objects.get(pk=trainer_id)
+    trainer_in_course = AssignUserToCourse.objects.filter(
+        assigned_user_id=trainer_id,
+    )
+
+    courses_id = [item.course_id for item in trainer_in_course]
+    courses = Course.objects.filter(pk__in=courses_id)
+    courses_upload = Course.objects.exclude(pk__in=courses_id)
+
+    if request.method == "POST":
+        course_upload_id = int(request.POST["course-upload"])
+        course_change_id = int(request.POST["course_change_id"])
+
+        for item in trainer_in_course:
+            if item.course_id == course_change_id:
+                item.course_id = course_upload_id
+                item.save()
+        return redirect("FPT:change-trainer-assign", trainer_id=trainer_id)
+    context = {
+        "trainer": trainer,
+        "courses_upload": courses_upload,
+        "courses": courses
+    }
+    return render(request, "change-assign-trainer.html", context)
+
+
+@require_http_methods(["GET", "POST"])
+def change_trainee_assign(request, trainee_id):
+    trainee_id = int(trainee_id)
+    trainee = Trainee.objects.get(pk=trainee_id)
+    trainee_in_course = AssignUserToCourse.objects.filter(
+        assigned_user_id=trainee_id,
+    )
+
+    courses_id = [item.course_id for item in trainee_in_course]
+    courses = Course.objects.filter(pk__in=courses_id)
+    courses_upload = Course.objects.exclude(pk__in=courses_id)
+
+    if request.method == "POST":
+        course_upload_id = int(request.POST["course-upload"])
+        course_change_id = int(request.POST["course_change_id"])
+
+        for item in trainee_in_course:
+            if item.course_id == course_change_id:
+                item.course_id = course_upload_id
+                item.save()
+        return redirect("FPT:change-trainee-assign", trainee_id=trainee_id)
+    context = {
+        "trainee": trainee,
+        "courses_upload": courses_upload,
+        "courses": courses
+    }
+    return render(request, "change-assign-trainee.html", context)
+
+
+# Manage Categories
 @require_http_methods(["GET"])
 def manage_categories(request):
     categories = Category.objects.all()

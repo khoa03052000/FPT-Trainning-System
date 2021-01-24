@@ -5,65 +5,7 @@
 {#      <a class="text-dark mb-4" ic-get-from="{% url 'FPT:course-detail' course.id %}"  ic-target="#course-detail-div" ic-replace-target="true">Back</a>#}
 {#    </div>#}
     <div class="col-12 col-sm-6 col-md-6">
-      <h3 class="text-dark mb-4">Manage User Assigned-{{ course.name }}</h3>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-6 col-xl-3 mb-4">
-      <div class="card shadow border-left-primary py-2">
-        <div class="card-body">
-          <div class="row align-items-center no-gutters">
-            <div class="col mr-2">
-              <div
-                class="text-uppercase text-primary font-weight-bold text-xs mb-1"
-              >
-                <span>Trainer</span>
-              </div>
-              <div class="text-dark font-weight-bold h5 mb-0">
-                <span>
-                    {{ trainers | length }}
-                </span>
-              </div>
-            </div>
-            <div class="col-auto">
-              <i
-                class="fas fa-user-tie fa-2x text-gray-300"
-                style="color: var(--dark)"
-              ></i>
-            </div>
-          </div>
-        </div>
-        <a href="{% url 'FPT:add-trainers-assign' course.id %}" class="btn btn-primary" role="button"
-          ><i class="fa fa-plus"></i>Add Trainer Assign</a
-        >
-      </div>
-    </div>
-    <div class="col-md-6 col-xl-3 mb-4" style="text-align: left">
-      <div class="card shadow border-left-success py-2">
-        <div class="card-body">
-          <div class="row align-items-center no-gutters">
-            <div class="col mr-2">
-              <div
-                class="text-uppercase text-success font-weight-bold text-xs mb-1"
-              >
-                <span>Trainee</span>
-              </div>
-              <div class="text-dark font-weight-bold h5 mb-0">
-                <span>{{ trainees | length  }}</span>
-              </div>
-            </div>
-            <div class="col-auto">
-              <i
-                class="fas fa-user fa-2x text-gray-300"
-                style="color: var(--gray-dark)"
-              ></i>
-            </div>
-          </div>
-        </div>
-        <a href="{% url 'FPT:add-trainees-assign' course.id %}" class="btn btn-primary" role="button"
-          ><i class="fa fa-plus"></i>&nbsp;Add Trainee Assign</a
-        >
-      </div>
+      <h3 class="text-dark mb-4">Manage User Assigned</h3>
     </div>
   </div>
   <div class="card" id="TableSorterCard-Trainer">
@@ -114,32 +56,20 @@
                 <th class="text-center">Name</th>
                 <th class="text-center">EMAIL</th>
                 <th class="text-center">Phone</th>
-                <th class="text-center">Working Place</th>
-                <th class="text-center">TYPE</th>
                 <th class="text-center filter-false sorter-false">Action</th>
               </tr>
             </thead>
-            <tbody class="text-center" ic-confirm="Are you sure?">
+            <tbody class="text-center">
               {% for trainer in trainers %}
               <tr id="row-trainer-{{ trainer.user_id }}">
                 <td>{{ trainer.user.full_name }}</td>
                 <td>{{ trainer.user.email }}</td>
                 <td>{{ trainer.phone }}</td>
-                <td>{{ trainer.working_place }}</td>
-                <td>{{ trainer.type }}</td>
                 <td class="text-center">
-                    {% if course.id is not None %}
 
-                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" id="token-trainer">
-                <a class="btn btn-danger" role="button" style="margin: 2px;" ic-action="remove" ic-target="#row-trainer-{{ trainer.user_id }}" ic-include="#token-trainer" ic-delete-from="{% url 'FPT:remove-assign-trainer' course.id trainer.user_id %}"  >
-                    <i class="fas fa-trash"></i>
-                </a>
-                        {% else %}
-                               <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" id="token-trainer">
-                <a class="btn btn-danger" role="button" style="margin: 2px;"  >
-                    <i class="fas fa-trash"></i>
-                </a>
-                    {% endif %}
+                  <a href="{% url 'FPT:change-trainer-assign' trainer.user_id %}" class="btn btn-success" role="button"
+                style="background: rgb(11,171,56);margin: 2px;"><i
+                    class="fas fa-pencil-alt"></i></a>
                 </td>
               </tr>
             {% endfor %}
@@ -197,39 +127,19 @@
                 <th class="text-center">Name</th>
                 <th class="text-center">EMAIL</th>
                 <th class="text-center">Phone</th>
-                  <th class="text-center">Age</th>
-                  <th class="text-center">Experience</th>
-                  <th class="text-center">Education</th>
-                  <th class="text-center">TOEIC Scope</th>
-                <th class="text-center">Location</th>
                 <th class="text-center filter-false sorter-false">Action</th>
               </tr>
             </thead>
-            <tbody class="text-center" ic-confirm="Are you sure?">
+            <tbody class="text-center">
               {% for trainee in trainees %}
               <tr id ="row-trainee-{{ trainee.user_id }}">
                 <td>{{ trainee.user.full_name }}</td>
                 <td>{{ trainee.user.email }}</td>
                 <td>{{ trainee.phone }}</td>
-                <td>{{ trainee.age }}</td>
-                <td>{{ trainee.experience }}</td>
-                <td>{{ trainee.education }}</td>
-                <td>{{ trainee.toeic_score }}</td>
-                <td>{{ trainee.location }}</td>
                 <td class="text-center">
-
-                    {% if course.id is not None %}
-                        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" id="token-trainee">
-                        <a class="btn btn-danger" role="button" style="margin: 2px;" ic-action="remove" ic-target="#row-trainee-{{ trainee.user_id }}" ic-include="#token-trainee" ic-delete-from="{% url 'FPT:remove-assign-trainee' course.id trainee.user_id %}"  >
-                        <i
-
-                            class="fas fa-trash"></i>
-
-                        </a>
-                        {% else %}
-                        <p>No Course</p>
-                    {% endif %}
-
+                                      <a href="{% url 'FPT:change-trainee-assign' trainee.user_id %}" class="btn btn-success" role="button"
+                style="background: rgb(11,171,56);margin: 2px;"><i
+                    class="fas fa-pencil-alt"></i></a>
                 </td>
               </tr>
             {% endfor %}

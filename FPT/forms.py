@@ -1,6 +1,6 @@
 from django import forms
 
-from FPT.models import Course, Category, Trainer, Trainee, User
+from FPT.models import Course, Category, Trainer, Trainee, User, AssignUserToCourse
 
 
 class CourseCreate(forms.ModelForm):
@@ -17,3 +17,7 @@ class CategoryCreate(forms.ModelForm):
             'name': forms.TextInput(attrs={'size': 10}),
             'description': forms.TextInput(attrs={'size': 20}),
         }
+
+
+class AssignCourseCreate(forms.Form):
+    course_id = forms.CharField(max_length=100)

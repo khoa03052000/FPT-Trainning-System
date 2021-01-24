@@ -19,18 +19,19 @@ urlpatterns = [
     # Assign Course
 
     path('courses/assign-course/<int:course_id>/', views.assign_course, name='assign-course'),
-
+    # Manage Assign
+    path('manage-assign/', views.manage_assign, name='manage-assign-user'),
+    path('manage-assign/change-trainers/<int:trainer_id>', views.change_trainer_assign, name='change-trainer-assign'),
+    path('manage-assign/change-trainees/<int:trainee_id>', views.change_trainee_assign, name='change-trainee-assign'),
     # Trainer Assign
 
     path('courses/assign-course/<int:course_id>/add-trainers/', views.add_trainers_assign, name='add-trainers-assign'),
-    # path('courses/assign-course/<int:course_id>/change-trainers/', views.change_trainers_assign, name='change-trainers-assign'),
-    path('courses/assign-course/<int:course_id>/change-trainers/remove-trainers/<int:trainer_id>/', views.remove_assign_trainer, name='remove-assign-trainer'),
+    path('courses/assign-course/<int:course_id>/remove-trainers/<int:trainer_id>/', views.remove_assign_trainer, name='remove-assign-trainer'),
 
     # Trainee Assign
 
     path('courses/assign-course/<int:course_id>/add-trainees/', views.add_trainees_assign, name='add-trainees-assign'),
-    # path('courses/assign-course/<int:course_id>/change-trainees/', views.change_trainees_assign, name='change-trainees-assign'),
-    path('courses/assign-course/<int:course_id>/change-trainees/remove-trainees/<int:trainee_id>/', views.remove_assign_trainee, name='remove-assign-trainee'),
+    path('courses/assign-course/<int:course_id>/remove-trainees/<int:trainee_id>/', views.remove_assign_trainee, name='remove-assign-trainee'),
 
     # Category
     path('categories/', views.manage_categories, name='categories'),
