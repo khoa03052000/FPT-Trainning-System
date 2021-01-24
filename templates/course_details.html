@@ -28,7 +28,12 @@
                         <div class="row">
                             <div class="col-sm-6 col-md-7 col-lg-7">
                                 <h1>{{ course.name }}</h1>
-                                <p>{{ course.description }}</p><img src="{{ course.image.url }}">
+                                <p>{{ course.description }}</p>
+                                {% if course.image.url is not None %}
+                                    <img src="{{ course.image.url }}">
+                                    {% else %}
+                                <p>No Image </p>
+                                {% endif %}
                             </div>
                             <div class="col">
                                 <h1 style="font-size: 20;">Categories</h1>

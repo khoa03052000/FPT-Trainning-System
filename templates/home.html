@@ -13,7 +13,10 @@
                     <div class="col">
                         <nav class="navbar navbar-light navbar-expand-md">
                             <div class="container-fluid">
-                                <div><a class="navbar-brand navbar-brand-centered" href="#"> <img style="max-height:50px;" src="{% static 'img/logo.png' %}"></a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button></div>
+                                <div><a class="navbar-brand navbar-brand-centered" href="#">
+
+                                    <img style="max-height:50px;" src="{% static 'img/logo.png' %}">
+                                </a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button></div>
                                 <div class="collapse navbar-collapse" id="navcol-1">
                                     <ul class="nav navbar-nav">
                                         <li class="nav-item"><a class="nav-link" href="{% url 'admin:index' %}">Admin </a></li>
@@ -31,7 +34,12 @@
             </div>
             <div class="row projects">
                 {% for course in courses %}
-                    <div class="col-sm-6 col-lg-4 item"><img class="img-fluid" src="{{ course.image.url }}">
+                    <div class="col-sm-6 col-lg-4 item">
+                    {% if course.image.url is not None %}
+                        <img class="img-fluid" src="{{ course.image.url }}">
+                        {% else %}
+                        <h3>No Image</h3>
+                        {% endif %}
                     <h3 class="name">{{course.name}}</h3>
                     <p class="description">{{ course.description}}</p>
                 </div>
