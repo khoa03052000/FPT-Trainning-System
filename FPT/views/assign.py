@@ -232,9 +232,9 @@ def change_trainer_assign(request, trainer_id):
         trainer_in_course = AssignUserToCourse.objects.filter(
             assigned_user_id=trainer_id,
         )
-        if trainer_in_course.count() == 0:
+        if not trainer_in_course.exists():
             messages.warning(request, "Trainer is not assigned in course")
-            return redirect('FPT:manage-assign-user')
+            return redirect("FPT:manage-assign-user")
 
         courses_id = [item.course_id for item in trainer_in_course]
         courses = Course.objects.filter(pk__in=courses_id)
@@ -279,9 +279,9 @@ def change_trainee_assign(request, trainee_id):
         trainee_in_course = AssignUserToCourse.objects.filter(
             assigned_user_id=trainee_id,
         )
-        if trainee_in_course.count() == 0:
+        if not trainee_in_course.exists():
             messages.warning(request, "Trainee is not assigned in course")
-            return redirect('FPT:manage-assign-user')
+            return redirect("FPT:manage-assign-user")
 
         courses_id = [item.course_id for item in trainee_in_course]
         courses = Course.objects.filter(pk__in=courses_id)

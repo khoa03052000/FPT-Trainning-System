@@ -174,11 +174,9 @@ def search_courses(request):
                 Q(name__icontains=request.POST["q"]) |
                 Q(description__icontains=request.POST["q"])
             )
-            if courses.count() > 0:
+            if courses.exists():
                 messages.success(request, f"Search courses success with {courses.count()} results")
-                context = {
-                    "courses": courses
-                }
+                context = {"courses": courses}
                 return render(request, "course.html", context)
 
             messages.warning(request, f"Not found category {request.POST['q']}")

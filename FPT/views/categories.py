@@ -123,11 +123,11 @@ def search_category(request):
                 Q(name__icontains=request.POST["q"]) |
                 Q(description__icontains=request.POST["q"])
             )
-            if categories.count() > 0:
-                messages.success(request, f"Search category success with {categories.count()} results")
-                context = {
-                    "categories": categories
-                }
+            if categories.exists():
+                messages.success(
+                    request, f"Search category success with {categories.count()} results"
+                )
+                context = {"categories": categories}
                 return render(request, "category.html", context)
 
             messages.warning(request, f"Not found category {request.POST['q']}")
