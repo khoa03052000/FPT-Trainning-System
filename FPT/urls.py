@@ -54,18 +54,18 @@ urlpatterns = [
     path('register/', get_dashboard, name='register'),
     path('account-manage/', account_manage, name='account-manage'),
     path('manage-profile/<int:user_id>/', manage_profile, name='manage-profile'),
-
+    path('change-profile-user/<int:user_id>/', change_profile_user, name='change-profile-user'),
     path('change-profile-trainer/<int:user_id>/', change_profile_trainer, name='change-profile-trainer'),
     path('change-profile-trainee/<int:user_id>/', change_profile_trainee, name='change-profile-trainee'),
-
+    path('reset-password/<int:user_id>/', reset_password, name='reset-password'),
+    path('remove-user/<int:user_id>/', remove_user, name='remove-user'),
+    path('search-users/', search_users, name='search-users'),
     # User
     path('change-password/', change_password, name='change-password'),
     path('profile/', get_profile, name='profile'),
     path('change-profile/', change_profile, name='change-profile'),
     # TODO: VIEW COURSE ASSIGN
     # TODO; REQUEST COURSE
-    # TODO: CHANGE PROFILE WITH ROLE
-    # TODO: RESET PASSWORD with staff
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

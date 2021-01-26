@@ -137,7 +137,7 @@
                                     <div class="col">
                                         <div class="form-group">
                                             <label for="last_name"><strong>Role</strong></label><input
-                                                class="form-control" type="text" name="last_name" value="{{ user }}"
+                                                class="form-control" type="text" name="last_name" value="{{ user.role }}"
                                                 disabled />
                                         </div>
                                     </div>
@@ -172,7 +172,7 @@
 
             <div class="card shadow" id ="trainer-info-page">
             <div class="card-header py-3">
-                <p class="text-primary m-0 font-weight-bold">No {{ user }} Info</p>
+                <p class="text-primary m-0 font-weight-bold">No {{ user.role }} Info</p>
             </div>
             {% elif user.is_trainer %}
             <div class="card shadow" id ="trainer-info-page">

@@ -16,7 +16,7 @@ class User(AbstractUser):
     department = models.CharField(default="FPT", max_length=20)
     avatar = models.ImageField(null=True, blank=True)
     full_name = models.CharField(max_length=50, blank=True)
-    role = models.CharField(max_length=10, default="")
+    role = models.CharField(max_length=10, default="", blank=True)
 
     def save(self, *args, **kwargs):
         if len(self.full_name) == 0:
@@ -28,8 +28,14 @@ class User(AbstractUser):
             self.role = "Staff"
         elif self.is_trainer:
             self.role = "Trainer"
+            Trainer.objects.create(
+                user=self
+            )
         elif self.is_trainee:
             self.role = "Trainee"
+            Trainee.objects.create(
+                user=self
+            )
         return super().save(*args, **kwargs)
 
 
@@ -47,7 +53,7 @@ class Trainee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     phone = models.CharField(max_length=12, default="09xx", blank=True)
     age = models.IntegerField(default=18, blank=True)
-    dot = models.DateField(default="", blank=True)
+    dot = models.DateField(default="2000-05-03", blank=True)
     education = models.CharField(max_length=50, default="FPT Education", blank=True)
     experience = models.IntegerField(default=1, blank=True)
     location = models.CharField(max_length=50, default="Da Nang", blank=True)
