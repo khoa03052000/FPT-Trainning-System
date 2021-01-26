@@ -1,0 +1,224 @@
+<div class="row">
+
+{% if user_info %}
+    <div class="col">
+        <div class="card shadow mb-3" id="user-form-update">
+            <div class="card-header py-3">
+                <p class="text-primary m-0 font-weight-bold">Staff: User Update</p>
+            </div>
+            <div class="card-body">
+                <form action="{% url 'FPT:change-profile-user' user_info.id %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="username"><strong>Username</strong></label>
+                                <input class="form-control" type="text" name="username" value="{{ user_info.username }}"
+                                    disabled />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="email"><strong>Email Address</strong></label><input class="form-control"
+                                    type="email" name="email" value="{{ user_info.email }}" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="first_name"><strong>First Name</strong></label><input class="form-control"
+                                    type="text" name="first_name" value="{{ user_info.first_name }}" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="last_name"><strong>Last Name</strong></label><input class="form-control"
+                                    type="text" name="last_name" value="{{ user_info.last_name }}" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="department"><strong>Department</strong></label><input class="form-control"
+                                    type="text" name="department" value="{{ user_info.department }}" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="avatar"><strong>Avatar</strong></label>
+                                <input type="file" name="avatar" accept="image/*" id="id_avatar">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <button class="btn btn-primary btn-sm" type="submit">
+                                Save
+                            </button>
+                            <button class="btn btn-danger submit-button" type="button" ic-action="remove"
+                                ic-target="#user-form-update">No Change</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% if user_info.is_trainer %}
+        <div class="card shadow" id="user-info">
+            <div class="card-header py-3">
+                <p class="text-primary m-0 font-weight-bold">Staff: {{ user_info.role }} Update</p>
+            </div>
+            <div class="card-body">
+                <form action="{% url 'FPT:change-profile-trainer' user_info.id %}" method="POST">
+                    {% csrf_token %}
+                    {% for field in upload_form %}
+                    <div class="form-group">
+                        <label for="{{ field.label.name }}"><strong>{{ field.label}}</strong></label>
+                        {{field}}
+                    </div>
+                    {% endfor %}
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-sm" type="submit">Save&nbsp;</button>
+                        <button class="btn btn-danger submit-button" type="button" ic-action="remove"
+                            ic-target="#user-info">No Change</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% elif user_info.is_trainee %}
+        <div class="card shadow" id="user-info">
+            <div class="card-header py-3">
+                <p class="text-primary m-0 font-weight-bold">{{ user_info.role }} Update</p>
+            </div>
+            <div class="card-body">
+                <form action="{% url 'FPT:change-profile-trainee' user_info.id %}" method="POST">
+                    {% csrf_token %}
+                    {% for field in upload_form %}
+                    <div class="form-group">
+                        <label for="{{ field.label.name }}"><strong>{{ field.label}}</strong></label>
+                        {{field}}
+                    </div>
+                    {% endfor %}
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-sm" type="submit">Save&nbsp;</button>
+                        <button class="btn btn-danger submit-button" type="button" ic-action="remove"
+                            ic-target="#user-info">No Change</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+{% elif user %}
+    <div class="col">
+        <div class="card shadow mb-3" id="user-form-update">
+            <div class="card-header py-3">
+                <p class="text-primary m-0 font-weight-bold">User Update</p>
+            </div>
+            <div class="card-body">
+                <form action="{% url 'FPT:change-profile' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="username"><strong>Username</strong></label>
+                                <input class="form-control" type="text" name="username" value="{{ user.username }}"
+                                    disabled />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="email"><strong>Email Address</strong></label><input class="form-control"
+                                    type="email" name="email" value="{{ user.email }}" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="first_name"><strong>First Name</strong></label><input class="form-control"
+                                    type="text" name="first_name" value="{{ user.first_name }}" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="last_name"><strong>Last Name</strong></label><input class="form-control"
+                                    type="text" name="last_name" value="{{ user.last_name }}" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="department"><strong>Department</strong></label><input class="form-control"
+                                    type="text" name="department" value="{{ user.department }}" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="avatar"><strong>Avatar</strong></label>
+                                <input type="file" name="avatar" accept="image/*" id="id_avatar">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <button class="btn btn-primary btn-sm" type="submit">
+                                Save
+                            </button>
+                            <button class="btn btn-danger submit-button" type="button" ic-action="remove"
+                                ic-target="#user-form-update">No Change</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% if user.is_trainer %}
+        <div class="card shadow" id="user-info">
+            <div class="card-header py-3">
+                <p class="text-primary m-0 font-weight-bold">{{ user }} Update</p>
+            </div>
+            <div class="card-body">
+                <form action="{% url 'FPT:change-profile-trainer' user.id %}" method="POST">
+                    {% csrf_token %}
+                    {% for field in upload_form %}
+                    <div class="form-group">
+                        <label for="{{ field.label.name }}"><strong>{{ field.label}}</strong></label>
+                        {{field}}
+                    </div>
+                    {% endfor %}
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-sm" type="submit">Save&nbsp;</button>
+                        <button class="btn btn-danger submit-button" type="button" ic-action="remove"
+                            ic-target="#user-info">No Change</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% elif user.is_trainee %}
+        <div class="card shadow" id="user-info">
+            <div class="card-header py-3">
+                <p class="text-primary m-0 font-weight-bold">{{ user }} Update</p>
+            </div>
+            <div class="card-body">
+                <form action="{% url 'FPT:change-profile-trainee' user.id %}" method="POST">
+                    {% csrf_token %}
+                    {% for field in upload_form %}
+                    <div class="form-group">
+                        <label for="{{ field.label.name }}"><strong>{{ field.label}}</strong></label>
+                        {{field}}
+                    </div>
+                    {% endfor %}
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-sm" type="submit">Save&nbsp;</button>
+                        <button class="btn btn-danger submit-button" type="button" ic-action="remove"
+                            ic-target="#user-info">No Change</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+{% endif %}
+</div>

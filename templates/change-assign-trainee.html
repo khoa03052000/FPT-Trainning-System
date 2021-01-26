@@ -93,6 +93,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                     # TODO: Change Profile url with Staff manage profile
                                     <button class="btn btn-primary btn-sm" type="submit">
                                         Trainee Profile
                                     </button>
@@ -140,7 +141,7 @@
                                                                 <select class="form-select"
                                                                     aria-label="Default select example"
                                                                     name="course-upload">
-                                                                    <option selected value="" disabled>Choose Course
+                                                                    <option selected value="0" >Choose Course
                                                                     </option>
                                                                     {% for course in courses_upload %}
                                                                     <option value="{{ course.id }}">{{ course.name }}

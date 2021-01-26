@@ -21,7 +21,8 @@ class UserAdmin(auth_admin.UserAdmin):
                     "is_trainer",
                     "is_trainee",
                     "avatar",
-                    "full_name"
+                    "full_name",
+                    "role"
                 )
             },
         ),

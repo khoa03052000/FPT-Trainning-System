@@ -36,6 +36,7 @@
                         <a class="nav-link active" href="{% url 'FPT:dashboard' %}"><i
                                 class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
                     </li>
+                    {% if user.is_superuser or user.is_staff %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'FPT:account-manage' %}"><i class="fas fa-user"></i><span>Account</span></a>
                     </li>
@@ -48,10 +49,18 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'FPT:categories' %}"><i class="fa fa-tags"></i><span>Categories</span></a>
                     </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'FPT:register' %}"><i
-                                class="fas fa-user-circle"></i><span>Register</span></a>
+                                class="fas fa-user-circle"></i><span>View Course</span></a>
                     </li>
+                    {% if user.is_trainee %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'FPT:register' %}"><i
+                                class="fas fa-user-circle"></i><span>Request Course</span></a>
+                    </li>
+                    {% endif %}
+
                 </ul>
                 <div class="text-center d-none d-md-inline">
                     <button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button>
@@ -173,14 +182,9 @@
                                     </a>
                                     <div class="dropdown-menu shadow dropdown-menu-right animated--grow-in">
                                         <a class="dropdown-item" href="{% url 'FPT:profile' %}"><i
-                                                class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Profile</a><a
-                                            class="dropdown-item" href="#"><i
-                                                class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Settings</a><a
-                                            class="dropdown-item" href="#"><i
-                                                class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Activity
-                                            log</a>
+                                                class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Profile</a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#"><i
+                                        <a class="dropdown-item" href="{% url 'logout' %}"><i
                                                 class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Logout</a>
                                     </div>
                                 </div>
@@ -188,6 +192,7 @@
                         </ul>
                     </div>
                 </nav>
+            {% include 'layout/message.html' %}
             {% block content %}
             {% endblock %}
             </div>
@@ -201,6 +206,7 @@
         </div>
         <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
+    {% block script %}
     <script type="text/javascript">
     window.onpageshow = function(event) {
     if (event.persisted) {
@@ -210,7 +216,10 @@
     function goBack() {
       window.history.back();
     }
+
+    {% endblock %}
    </script>
+
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/theme.js' %}"></script>
     <script src="{% static 'js/chart.min.js' %}"></script>

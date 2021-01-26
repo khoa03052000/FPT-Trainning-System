@@ -1,4 +1,6 @@
- <form class="form" action="{% url 'FPT:update_category' category.id %}" method="POST">
+
+<div class="card shadow mb-4" id="category-form-update" >
+    <div class="card-header d-flex justify-content-between align-items-center" >  <form class="form" action="{% url 'FPT:update-category' category.id %}" method="POST">
     <div class="form-group">
         <h6 class="text-primary font-weight-bold m-2">Update Category</h6>
         {% csrf_token %}
@@ -13,6 +15,8 @@
             </div>
         {% endfor %}
     <br>
-        <button class="btn btn-light submit-button" type="submit">Save</button>
+        <button class="btn btn-primary submit-button" type="submit">Save</button>
+     <button class="btn btn-danger submit-button" type="submit" ic-action="remove" ic-target="#category-form-update">Back</button>
     </div>
-</form>
+</form>  </div>
+</div>

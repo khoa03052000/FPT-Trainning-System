@@ -15,11 +15,20 @@
                     <p class="text-primary m-0 font-weight-bold">List Courses</p>
                 </div>
                 <div class="col-12 col-sm-7 col-md-6 text-right" style="margin: 0px;padding: 5px 15px;">
-                    <button class="btn btn-primary btn-sm reset" type="button" style="margin: 2px;">Sort</button><button
-                        class="btn btn-warning btn-sm" id="zoom_in" type="button" zoomclick="ChangeZoomLevel(-10);"
-                        style="margin: 2px;"><i class="fa fa-sort-up"></i></button><button
-                        class="btn btn-warning btn-sm" id="zoom_out" type="button" zoomclick="ChangeZoomLevel(-10);"
-                        style="margin: 2px;"><i class="fa fa-sort-down"></i></button>
+                        <form
+                                action="{% url 'FPT:search-courses' %}" method="post"
+                            class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <input class="bg-light form-control border-0 small" type="text"
+                                    placeholder="Search for ..." name="q" />
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary py-0" type="submit">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                 </div>
             </div>
         </div>
@@ -48,8 +57,16 @@
                                 </td>
                                 <td>{{ course.description }}</td>
                                 <td class="text-center">
-                                    <a class="btn btn-primary" role="button" style="margin: 2px;"><i
-                                            class="far fa-eye"></i></a>
+                                    {% if course.is_visible %}
+                                      <a href="{% url 'FPT:set-visible' course.id %}" class="btn btn-primary" role="button" style="margin: 2px;"><i
+                                        class="far fa-eye"></i>
+                                      {% else %}
+                                      <a href="{% url 'FPT:set-visible' course.id %}" class="btn btn-primary" role="button" style="margin: 2px;"><i
+                                        class="far fa-eye-slash"></i>
+                                    </a>
+                                    </a>
+                                    {% endif %}
+
                                     <a href="{% url 'FPT:course-detail' course.id %}" class="btn btn-success" role="button"
                                         style="background: rgb(11,171,56);margin: 2px;"><i
                                             class="fas fa-pencil-alt"></i></a>
