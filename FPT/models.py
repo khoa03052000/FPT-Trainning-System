@@ -17,6 +17,17 @@ class User(AbstractUser):
     avatar = models.ImageField(null=True, blank=True)
     full_name = models.CharField(max_length=50, blank=True)
 
+    def __str__(self):
+        if self.is_superuser and self.is_staff:
+            return "Admin"
+        elif self.is_staff:
+            return "Staff"
+        elif self.is_trainer:
+            return "Trainer"
+        elif self.is_trainee:
+            return "Trainee"
+        return "No Role"
+
     def save(self, *args, **kwargs):
         if len(self.full_name) == 0:
             self.full_name = self.last_name + self.first_name
@@ -37,7 +48,7 @@ class Trainee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     phone = models.CharField(max_length=12, default="09xx", blank=True)
     age = models.IntegerField(default=18, blank=True)
-    dot = models.DateField(default="03/05/2000", blank=True)
+    dot = models.DateField(default="", blank=True)
     education = models.CharField(max_length=50, default="FPT Education", blank=True)
     experience = models.IntegerField(default=1, blank=True)
     location = models.CharField(max_length=50, default="Da Nang", blank=True)
@@ -47,14 +58,17 @@ class Trainee(models.Model):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=50, blank=True)
+    name = models.CharField(max_length=50, unique=True)
     description = models.TextField(default="", blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Course(models.Model):
-    name = models.CharField(max_length=50, default="", blank=True)
+    name = models.CharField(max_length=50, unique=True)
     category = models.ManyToManyField(Category, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     image = models.ImageField(null=True, blank=True)
