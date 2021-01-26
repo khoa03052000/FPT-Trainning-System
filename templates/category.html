@@ -15,11 +15,19 @@
                     <p class="text-primary m-0 font-weight-bold">List Category</p>
                 </div>
                 <div class="col-12 col-sm-7 col-md-6 text-right" style="margin: 0px;padding: 5px 15px;">
-                    <button class="btn btn-primary btn-sm reset" type="button" style="margin: 2px;">Sort</button><button
-                        class="btn btn-warning btn-sm" id="zoom_in" type="button" zoomclick="ChangeZoomLevel(-10);"
-                        style="margin: 2px;"><i class="fa fa-sort-up"></i></button><button
-                        class="btn btn-warning btn-sm" id="zoom_out" type="button" zoomclick="ChangeZoomLevel(-10);"
-                        style="margin: 2px;"><i class="fa fa-sort-down"></i></button>
+                  <form action="{% url 'FPT:search-categories' %}" method="POST"
+                    class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                    {% csrf_token %}
+                      <div class="input-group">
+                        <input class="bg-light form-control border-0 small" type="text"
+                            placeholder="Search for ..." name="q" />
+                        <div class="input-group-append">
+                            <button class="btn btn-primary py-0" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
                 </div>
             </div>
         </div>

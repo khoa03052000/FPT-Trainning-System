@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
@@ -27,6 +28,10 @@ def create_category(request):
     if request.user.is_staff:
         upload = CategoryCreate()
         if request.method == 'POST':
+            check_category = Category.objects.get(name=request.POST["name"])
+            if check_category:
+                messages.warning(request, f"The category with name {check_category.name} is exist")
+                return redirect("FPT:create-category")
             upload = CategoryCreate(request.POST)
             if upload.is_valid():
                 upload.save()
@@ -41,7 +46,7 @@ def create_category(request):
     return redirect("FPT:dashboard")
 
 
-@require_http_methods(["GET", "PUT"])
+@require_http_methods(["GET"])
 @login_required
 def category_detail(request, category_id):
     if request.user.is_staff:
@@ -77,6 +82,10 @@ def update_category(request, category_id):
             }
             return render(request, 'category_update.html', context)
         if request.method == 'POST':
+            check_category = Category.objects.get(name=request.POST["name"])
+            if check_category:
+                messages.warning(request, f"The category with name {check_category.name} is exist")
+                return redirect("FPT:category-detail", category_id=category_self.id)
             category_form = CategoryCreate(request.POST, instance=category_self)
             if category_form.is_valid():
                 category_form.save()
@@ -101,5 +110,30 @@ def delete_category(request, category_id):
             return HttpResponse(status=204)
         messages.success(request, "Delete category success")
         return redirect("FPT:categories")
+    messages.warning(request, "You don't have permission to action")
+    return redirect("FPT:dashboard")
+
+
+@require_http_methods(["POST"])
+@login_required
+def search_category(request):
+    if request.user.is_staff:
+        if request.method == "POST":
+            categories = Category.objects.filter(
+                Q(name__icontains=request.POST["q"]) |
+                Q(description__icontains=request.POST["q"])
+            )
+            if categories.count() > 0:
+                messages.success(request, f"Search category success with {categories.count()} results")
+                context = {
+                    "categories": categories
+                }
+                return render(request, "category.html", context)
+
+            messages.warning(request, f"Not found category {request.POST['q']}")
+            context = {
+                "categories": categories
+            }
+            return render(request, "category.html", context)
     messages.warning(request, "You don't have permission to action")
     return redirect("FPT:dashboard")
