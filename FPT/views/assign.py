@@ -1,16 +1,11 @@
 from django.contrib import messages
-from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.contenttypes.models import ContentType
-from django.shortcuts import render, redirect, get_object_or_404
-from django.views.decorators.http import require_GET, require_http_methods
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from django.views.decorators.http import require_http_methods
 
-from FPT.forms import CourseCreate, CategoryCreate, UserForm, TraineeForm, TrainerForm
-from FPT.models import Course, Trainer, Trainee, User, Request, Category, AssignUserToCourse
-from django.http import HttpResponse, response
-from django.views.generic import ListView
-from django.db.models import Q
+from FPT.models import Course, Trainer, Trainee, AssignUserToCourse
 
 
 @require_http_methods(["GET"])
