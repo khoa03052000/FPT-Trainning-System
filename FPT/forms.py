@@ -1,6 +1,9 @@
 from django import forms
+from django.contrib.auth import get_user_model
 
-from FPT.models import Course, Category, Trainer, Trainee, User, AssignUserToCourse
+from FPT.models import Course, Category, Trainer, Trainee
+
+User = get_user_model()
 
 
 class CourseCreate(forms.ModelForm):
@@ -19,5 +22,32 @@ class CategoryCreate(forms.ModelForm):
         }
 
 
-class AssignCourseCreate(forms.Form):
-    course_id = forms.CharField(max_length=100)
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["email", "first_name", "last_name", "department", "avatar"]
+
+
+class TrainerForm(forms.ModelForm):
+    class Meta:
+        model = Trainer
+        fields = [
+            "education",
+            "phone",
+            "working_place",
+            "type",
+        ]
+
+
+class TraineeForm(forms.ModelForm):
+    class Meta:
+        model = Trainee
+        fields = [
+            "phone",
+            "age",
+            "dot",
+            "education",
+            "location",
+            "toeic_score",
+            "experience"
+        ]

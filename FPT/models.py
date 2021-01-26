@@ -16,21 +16,20 @@ class User(AbstractUser):
     department = models.CharField(default="FPT", max_length=20)
     avatar = models.ImageField(null=True, blank=True)
     full_name = models.CharField(max_length=50, blank=True)
-
-    def __str__(self):
-        if self.is_superuser and self.is_staff:
-            return "Admin"
-        elif self.is_staff:
-            return "Staff"
-        elif self.is_trainer:
-            return "Trainer"
-        elif self.is_trainee:
-            return "Trainee"
-        return "No Role"
+    role = models.CharField(max_length=10, default="")
 
     def save(self, *args, **kwargs):
         if len(self.full_name) == 0:
             self.full_name = self.last_name + self.first_name
+
+        if self.is_superuser and self.is_staff:
+            self.role = "Admin"
+        elif self.is_staff:
+            self.role = "Staff"
+        elif self.is_trainer:
+            self.role = "Trainer"
+        elif self.is_trainee:
+            self.role = "Trainee"
         return super().save(*args, **kwargs)
 
 
