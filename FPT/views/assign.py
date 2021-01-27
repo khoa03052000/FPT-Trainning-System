@@ -60,18 +60,24 @@ def add_trainers_assign(request, course_id):
         trainer_type = ContentType.objects.get_for_model(Trainer)
         course_assign = AssignUserToCourse.objects.filter(course=course_self, assigned_user_type=trainer_type)
 
-        # Check Trainer assigned in Course
-        list_trainer_id_assigned = [i.assigned_user_id for i in course_assign]
-        if len(list_trainer_id_assigned) >= 3:
+        if course_assign.count() >= 3:
             messages.warning(request, "The course have full trainer!")
             return redirect('FPT:assign-course', course_id=course_id)
+
+        # Check Trainer assigned in Course
+        list_trainer_id_assigned = [i.assigned_user_id for i in course_assign]
 
         # Handler Create List Trainers
         if request.method == "POST":
             trainers_id_list = request.POST.getlist('list-trainers')
-            if len(trainers_id_list) > 3:
+            if len(trainers_id_list) == 0:
+                messages.warning(request, "Please choose at least one trainer with submit")
+                return redirect('FPT:add-trainers-assign', course_id=course_id)
+
+            if len(trainers_id_list) + course_assign.count() > 3:
                 messages.warning(request, "The course have full trainer!")
                 return redirect('FPT:add-trainers-assign', course_id=course_id)
+
             for i in range(0, len(trainers_id_list)):
                 trainers_id_list[i] = int(trainers_id_list[i])
 
@@ -115,7 +121,8 @@ def remove_assign_trainer(request, course_id, trainer_id):
             messages.error(request, "Not found trainer in course")
             return redirect('FPT:assign-course')
         course_assign.delete()
-        return HttpResponse(status=204)
+        messages.success(request, "Delete trainer assigned in course")
+        return redirect("FPT:manage-assign-user")
     messages.warning(request, "You don't have permission to action")
     return redirect("FPT:dashboard")
 
@@ -135,18 +142,22 @@ def add_trainees_assign(request, course_id):
         # Get info Course Assign and Type User
         trainee_type = ContentType.objects.get_for_model(Trainee)
         course_assign = AssignUserToCourse.objects.filter(course=course_self, assigned_user_type=trainee_type)
-
-        # Check Trainee assigned in Course
-        list_trainee_id_assigned = [i.assigned_user_id for i in course_assign]
-        if len(list_trainee_id_assigned) >= 20:
+        if course_assign.count() >= 20:
             messages.warning(request, "The course have full trainee")
             return redirect('FPT:assign-course', course_id=course_id)
+        # Check Trainee assigned in Course
+        list_trainee_id_assigned = [i.assigned_user_id for i in course_assign]
 
         # Handler Create List Trainees
         if request.method == "POST":
             trainees_id_list = request.POST.getlist('list-trainees')
-            if len(trainees_id_list) > 20:
-                messages.warning(request, "The course have full trainee!")
+
+            if len(trainees_id_list) == 0:
+                messages.warning(request, "Please choose at least one trainee with submit")
+                return redirect('FPT:add-trainees-assign', course_id=course_id)
+
+            if len(trainees_id_list) + course_assign.count() > 20:
+                messages.warning(request, f"The course have full trainee!, Slot have {20-course_assign.count()}")
                 return redirect('FPT:add-trainees-assign', course_id=course_id)
 
             for i in range(0, len(trainees_id_list)):
@@ -191,7 +202,8 @@ def remove_assign_trainee(request, course_id, trainee_id):
             messages.error(request, "Not found trainer in course")
             return redirect('FPT:assign-course')
         course_assign.delete()
-        return HttpResponse(status=204)
+        messages.success(request, "Delete trainee assigned in course")
+        return redirect("FPT:manage-assign-user")
     messages.warning(request, "You don't have permission to action")
     return redirect("FPT:dashboard")
 
@@ -250,11 +262,15 @@ def change_trainer_assign(request, trainer_id):
 
             for item in trainer_in_course:
                 if item.course_id == course_change_id:
-                    item.course_id = course_upload_id
+                    try:
+                        course_change = Course.objects.get(id=course_upload_id)
+                    except Course.DoesNotExist:
+                        messages.error(request, f"Trainer can not been moved to the course")
+                        return redirect("FPT:change-trainer-assign", trainer_id=trainer_id)
+                    item.course = course_change
                     item.save()
-            course_change = Course.objects.get(id=course_upload_id).name
-            messages.success(request, f"Trainer has been moved to the {course_change} course")
-            return redirect("FPT:change-trainer-assign", trainer_id=trainer_id)
+                    messages.success(request, f"Trainer has been moved to the {course_change.name} course")
+                    return redirect("FPT:change-trainer-assign", trainer_id=trainer_id)
         context = {
             "trainer": trainer,
             "courses_upload": courses_upload,
@@ -296,11 +312,15 @@ def change_trainee_assign(request, trainee_id):
 
             for item in trainee_in_course:
                 if item.course_id == course_change_id:
-                    item.course_id = course_upload_id
+                    try:
+                        course_change = Course.objects.get(id=course_upload_id)
+                    except Course.DoesNotExist:
+                        messages.error(request, f"Trainee can not been moved to the course")
+                        return redirect("FPT:change-trainee-assign", trainee_id=trainee_id)
+                    item.course = course_change
                     item.save()
-            course_change = Course.objects.get(id=course_upload_id).name
-            messages.success(request, f"Trainee has been moved to the {course_change} course")
-            return redirect("FPT:change-trainee-assign", trainee_id=trainee_id)
+                    messages.success(request, f"Trainee has been moved to the {course_change.name} course")
+                    return redirect("FPT:change-trainee-assign", trainee_id=trainee_id)
         context = {
             "trainee": trainee,
             "courses_upload": courses_upload,

@@ -75,6 +75,9 @@ class Course(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.name
+
 
 class AssignUserToCourse(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="course_assign")

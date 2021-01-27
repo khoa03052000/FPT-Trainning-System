@@ -7,10 +7,8 @@
             {% for field in upload_form %}
                 <div class="form-row form-group">
                     <div class="col-sm-4 label-column">
-                        <label class="col-form-label" for="name-input-field">{{field.label}} </label>
-                    </div>
-                    <div class="col-sm-6 input-column">
-                        {{ field }}
+                       <label for="{{ field.label.name }}"><strong>{{ field.label}}</strong></label>
+                        {{field}}
                     </div>
                 </div>
             {% endfor %}

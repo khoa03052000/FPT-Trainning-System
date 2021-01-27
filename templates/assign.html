@@ -1,9 +1,6 @@
 {% extends 'layout/base_dashboard.html' %} {% load static %} {% block content %}
 <div class="container-fluid" id="course-assign-div">
   <div class="row">
-{#      <div class="col-12 col-sm-6 col-md-6">#}
-{#      <a class="text-dark mb-4" ic-get-from="{% url 'FPT:course-detail' course.id %}"  ic-target="#course-detail-div" ic-replace-target="true">Back</a>#}
-{#    </div>#}
     <div class="col-12 col-sm-6 col-md-6">
       <h3 class="text-dark mb-4">Manage User Assigned-{{ course.name }}</h3>
     </div>
@@ -14,28 +11,22 @@
         <div class="card-body">
           <div class="row align-items-center no-gutters">
             <div class="col mr-2">
-              <div
-                class="text-uppercase text-primary font-weight-bold text-xs mb-1"
-              >
+              <div class="text-uppercase text-primary font-weight-bold text-xs mb-1">
                 <span>Trainer</span>
               </div>
               <div class="text-dark font-weight-bold h5 mb-0">
                 <span>
-                    {{ trainers | length }}
+                  {{ trainers | length }}
                 </span>
               </div>
             </div>
             <div class="col-auto">
-              <i
-                class="fas fa-user-tie fa-2x text-gray-300"
-                style="color: var(--dark)"
-              ></i>
+              <i class="fas fa-user-tie fa-2x text-gray-300" style="color: var(--dark)"></i>
             </div>
           </div>
         </div>
-        <a href="{% url 'FPT:add-trainers-assign' course.id %}" class="btn btn-primary" role="button"
-          ><i class="fa fa-plus"></i>Add Trainer Assign</a
-        >
+        <a href="{% url 'FPT:add-trainers-assign' course.id %}" class="btn btn-primary" role="button"><i
+            class="fa fa-plus"></i>Add Trainer Assign</a>
       </div>
     </div>
     <div class="col-md-6 col-xl-3 mb-4" style="text-align: left">
@@ -43,65 +34,28 @@
         <div class="card-body">
           <div class="row align-items-center no-gutters">
             <div class="col mr-2">
-              <div
-                class="text-uppercase text-success font-weight-bold text-xs mb-1"
-              >
+              <div class="text-uppercase text-success font-weight-bold text-xs mb-1">
                 <span>Trainee</span>
               </div>
               <div class="text-dark font-weight-bold h5 mb-0">
-                <span>{{ trainees | length  }}</span>
+                <span>{{ trainees | length }}</span>
               </div>
             </div>
             <div class="col-auto">
-              <i
-                class="fas fa-user fa-2x text-gray-300"
-                style="color: var(--gray-dark)"
-              ></i>
+              <i class="fas fa-user fa-2x text-gray-300" style="color: var(--gray-dark)"></i>
             </div>
           </div>
         </div>
-        <a href="{% url 'FPT:add-trainees-assign' course.id %}" class="btn btn-primary" role="button"
-          ><i class="fa fa-plus"></i>&nbsp;Add Trainee Assign</a
-        >
+        <a href="{% url 'FPT:add-trainees-assign' course.id %}" class="btn btn-primary" role="button"><i
+            class="fa fa-plus"></i>&nbsp;Add Trainee Assign</a>
       </div>
     </div>
   </div>
   <div class="card" id="TableSorterCard-Trainer">
     <div class="card-header py-3">
       <div class="row table-topper align-items-center">
-        <div
-          class="col-12 col-sm-5 col-md-6 text-left"
-          style="margin: 0px; padding: 5px 15px"
-        >
+        <div class="col-12 col-sm-5 col-md-6 text-left" style="margin: 0px; padding: 5px 15px">
           <p class="text-primary m-0 font-weight-bold">List Trainer Assign</p>
-        </div>
-        <div
-          class="col-12 col-sm-7 col-md-6 text-right"
-          style="margin: 0px; padding: 5px 15px"
-        >
-          <button
-            class="btn btn-primary btn-sm reset"
-            type="button"
-            style="margin: 2px"
-          >
-            Sort</button
-          ><button
-            class="btn btn-warning btn-sm"
-            id="zoom_in"
-            type="button"
-            zoomclick="ChangeZoomLevel(-10);"
-            style="margin: 2px"
-          >
-            <i class="fa fa-sort-up"></i></button
-          ><button
-            class="btn btn-warning btn-sm"
-            id="zoom_out"
-            type="button"
-            zoomclick="ChangeZoomLevel(-10);"
-            style="margin: 2px"
-          >
-            <i class="fa fa-sort-down"></i>
-          </button>
         </div>
       </div>
     </div>
@@ -111,7 +65,7 @@
           <table class="table table-striped table tablesorter" id="trainer-assign-table">
             <thead class="thead-dark">
               <tr>
-                <th class="text-center">Name</th>
+                <th class="text-center">Username</th>
                 <th class="text-center">EMAIL</th>
                 <th class="text-center">Phone</th>
                 <th class="text-center">Working Place</th>
@@ -122,27 +76,29 @@
             <tbody class="text-center" ic-confirm="Are you sure?">
               {% for trainer in trainers %}
               <tr id="row-trainer-{{ trainer.user_id }}">
-                <td>{{ trainer.user.full_name }}</td>
+                <td>{{ trainer.user.username }}</td>
                 <td>{{ trainer.user.email }}</td>
                 <td>{{ trainer.phone }}</td>
                 <td>{{ trainer.working_place }}</td>
                 <td>{{ trainer.type }}</td>
                 <td class="text-center">
-                    {% if course.id is not None %}
+                  {% if course.id is not None %}
 
-                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" id="token-trainer">
-                <a class="btn btn-danger" role="button" style="margin: 2px;" ic-action="remove" ic-target="#row-trainer-{{ trainer.user_id }}" ic-include="#token-trainer" ic-delete-from="{% url 'FPT:remove-assign-trainer' course.id trainer.user_id %}"  >
+                  <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" id="token-trainer">
+                  <a class="btn btn-danger" role="button" style="margin: 2px;" ic-action="remove"
+                    ic-target="#row-trainer-{{ trainer.user_id }}" ic-include="#token-trainer"
+                    ic-delete-from="{% url 'FPT:remove-assign-trainer' course.id trainer.user_id %}">
                     <i class="fas fa-trash"></i>
-                </a>
-                        {% else %}
-                               <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" id="token-trainer">
-                <a class="btn btn-danger" role="button" style="margin: 2px;"  >
+                  </a>
+                  {% else %}
+                  <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" id="token-trainer">
+                  <a class="btn btn-danger" role="button" style="margin: 2px;">
                     <i class="fas fa-trash"></i>
-                </a>
-                    {% endif %}
+                  </a>
+                  {% endif %}
                 </td>
               </tr>
-            {% endfor %}
+              {% endfor %}
             </tbody>
           </table>
         </div>
@@ -152,39 +108,8 @@
   <div class="card" id="TableSorterCard-Trainee">
     <div class="card-header py-3">
       <div class="row table-topper align-items-center">
-        <div
-          class="col-12 col-sm-5 col-md-6 text-left"
-          style="margin: 0px; padding: 5px 15px"
-        >
+        <div class="col-12 col-sm-5 col-md-6 text-left" style="margin: 0px; padding: 5px 15px">
           <p class="text-primary m-0 font-weight-bold">List Trainee Assign</p>
-        </div>
-        <div
-          class="col-12 col-sm-7 col-md-6 text-right"
-          style="margin: 0px; padding: 5px 15px"
-        >
-          <button
-            class="btn btn-primary btn-sm reset"
-            type="button"
-            style="margin: 2px"
-          >
-            Sort</button
-          ><button
-            class="btn btn-warning btn-sm"
-            id="zoom_in"
-            type="button"
-            zoomclick="ChangeZoomLevel(-10);"
-            style="margin: 2px"
-          >
-            <i class="fa fa-sort-up"></i></button
-          ><button
-            class="btn btn-warning btn-sm"
-            id="zoom_out"
-            type="button"
-            zoomclick="ChangeZoomLevel(-10);"
-            style="margin: 2px"
-          >
-            <i class="fa fa-sort-down"></i>
-          </button>
         </div>
       </div>
     </div>
@@ -194,21 +119,21 @@
           <table class="table table-striped table tablesorter" id="trainee-assign-table">
             <thead class="thead-dark">
               <tr>
-                <th class="text-center">Name</th>
+                <th class="text-center">Username</th>
                 <th class="text-center">EMAIL</th>
                 <th class="text-center">Phone</th>
-                  <th class="text-center">Age</th>
-                  <th class="text-center">Experience</th>
-                  <th class="text-center">Education</th>
-                  <th class="text-center">TOEIC Scope</th>
+                <th class="text-center">Age</th>
+                <th class="text-center">Experience</th>
+                <th class="text-center">Education</th>
+                <th class="text-center">TOEIC Scope</th>
                 <th class="text-center">Location</th>
                 <th class="text-center filter-false sorter-false">Action</th>
               </tr>
             </thead>
             <tbody class="text-center" ic-confirm="Are you sure?">
               {% for trainee in trainees %}
-              <tr id ="row-trainee-{{ trainee.user_id }}">
-                <td>{{ trainee.user.full_name }}</td>
+              <tr id="row-trainee-{{ trainee.user_id }}">
+                <td>{{ trainee.user.username }}</td>
                 <td>{{ trainee.user.email }}</td>
                 <td>{{ trainee.phone }}</td>
                 <td>{{ trainee.age }}</td>
@@ -218,21 +143,21 @@
                 <td>{{ trainee.location }}</td>
                 <td class="text-center">
 
-                    {% if course.id is not None %}
-                        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" id="token-trainee">
-                        <a class="btn btn-danger" role="button" style="margin: 2px;" ic-action="remove" ic-target="#row-trainee-{{ trainee.user_id }}" ic-include="#token-trainee" ic-delete-from="{% url 'FPT:remove-assign-trainee' course.id trainee.user_id %}"  >
-                        <i
+                  {% if course.id is not None %}
+                  <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" id="token-trainee">
+                  <a class="btn btn-danger" role="button" style="margin: 2px;" ic-action="remove"
+                    ic-target="#row-trainee-{{ trainee.user_id }}" ic-include="#token-trainee"
+                    ic-delete-from="{% url 'FPT:remove-assign-trainee' course.id trainee.user_id %}">
+                    <i class="fas fa-trash"></i>
 
-                            class="fas fa-trash"></i>
-
-                        </a>
-                        {% else %}
-                        <p>No Course</p>
-                    {% endif %}
+                  </a>
+                  {% else %}
+                  <p>No Course</p>
+                  {% endif %}
 
                 </td>
               </tr>
-            {% endfor %}
+              {% endfor %}
             </tbody>
           </table>
         </div>
@@ -241,4 +166,3 @@
   </div>
 </div>
 {% endblock %}
-
