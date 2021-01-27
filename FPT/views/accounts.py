@@ -1,14 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import SetPasswordForm
+from django.contrib.auth.forms import SetPasswordForm, UserCreationForm
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
 
 from FPT.forms import UserForm, TraineeForm, TrainerForm
-from FPT.models import Trainer, Trainee, User
+from FPT.models import Trainer, Trainee
 
 User = get_user_model()
 
@@ -134,20 +134,15 @@ def change_profile_trainer(request, user_id):
         except User.DoesNotExist or Trainer.DoesNotExist:
             messages.success(request, "Not found Trainer in system")
             return redirect("FPT:dashboard")
-
-        if user.is_superuser or user.is_staff or user.is_trainer:
-            if request.method == 'POST':
-                trainer_change = TrainerForm(request.POST, instance=trainer)
-                if trainer_change.is_valid():
-                    trainer_change.save()
-                    if user.is_staff:
-                        messages.success(request, 'Trainer info was successfully update')
-                        return redirect("FPT:manage-profile", user.id)
-                    if user.is_trainer:
-                        messages.success(request, 'Your Trainer info was successfully update')
-                        return redirect("FPT:profile")
-        messages.warning(request, "You don't have permission to action")
-        return redirect("FPT:dashboard")
+        trainer_change = TrainerForm(request.POST, instance=trainer)
+        if trainer_change.is_valid():
+            trainer_change.save()
+            if request.user.is_staff:
+                messages.success(request, 'Trainer info was successfully update')
+                return redirect("FPT:manage-profile", user.id)
+            if user.is_trainer:
+                messages.success(request, 'Your Trainer info was successfully update')
+                return redirect("FPT:profile")
     messages.warning(request, "You don't have permission to action")
     return redirect("FPT:dashboard")
 
@@ -162,19 +157,17 @@ def change_profile_trainee(request, user_id):
         except User.DoesNotExist or Trainer.DoesNotExist:
             messages.success(request, "Not found Trainer in system")
             return redirect("FPT:dashboard")
-        if user.is_superuser or user.is_staff or user.is_trainee:
-            if request.method == 'POST':
-                trainee_change = TraineeForm(request.POST, instance=trainee)
-                if trainee_change.is_valid():
-                    trainee_change.save()
-                    if user.is_staff:
-                        messages.success(request, 'Trainee info was successfully update')
-                        return redirect("FPT:manage-profile", user.id)
-                    if user.is_trainee:
-                        messages.success(request, 'Your Trainee info was successfully update')
-                        return redirect("FPT:profile")
-        messages.warning(request, "You don't have permission to action")
-        return redirect("FPT:dashboard")
+        trainee_change = TraineeForm(request.POST, instance=trainee)
+        if trainee_change.is_valid():
+            trainee_change.save()
+            if request.user.is_staff:
+                messages.success(request, 'Trainee info was successfully update')
+                return redirect("FPT:manage-profile", user.id)
+            if user.is_trainee:
+                messages.success(request, 'Your Trainee info was successfully update')
+                return redirect("FPT:profile")
+        messages.warning(request, "Please try again")
+        return redirect("FPT:manage-profile", user.id)
     messages.warning(request, "You don't have permission to action")
     return redirect("FPT:dashboard")
 

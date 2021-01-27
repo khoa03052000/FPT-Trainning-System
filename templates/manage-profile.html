@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 <div class="container-fluid">
-    <h3 class="text-dark mb-4">Profile: {{ user_info.full_name }}</h3>
+    <h3 class="text-dark mb-4">Profile: {{ user_info.username }}</h3>
     <div class="row mb-3">
         <div class="col-lg-4">
             <div class="card mb-3">
@@ -172,116 +172,106 @@
                 </div>
             </div>
             {% elif user_info.is_trainer %}
-                <div class="card shadow mb-3" id="trainer-info-page">
-                    <div class="card-header py-3">
-                        <p class="text-primary m-0 font-weight-bold">Trainer Info</p>
-                    </div>
-                    <div class="card-body">
-                        <form>
-                            <div class="form-row">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="education"><strong>Education</strong></label>
-                                        <input class="form-control" type="text" name="education"
-                                            value="{{ user_type.education }}" disabled />
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="phone"><strong>Phone</strong></label><input class="form-control"
-                                            type="text" name="phone" value="{{ user_type.phone }}" disabled />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="working-place"><strong>Working Place</strong></label><input
-                                            class="form-control" type="text" name="working-place"
-                                            value="{{ user_type.working_place }}" disabled />
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="type"><strong>Type</strong></label><input class="form-control"
-                                            type="text" name="type" value="{{ user_type.type.get_type_display }}"
-                                            disabled />
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+            <div class="card shadow mb-3" id="trainer-info-page">
+                <div class="card-header py-3">
+                    <p class="text-primary m-0 font-weight-bold">Trainer Info</p>
                 </div>
+                <div class="card-body">
+                    <form>
+                        <div class="form-row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="education"><strong>Education</strong></label>
+                                    <input class="form-control" type="text" name="education"
+                                        value="{{ user_type.education }}" disabled />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="phone"><strong>Phone</strong></label><input class="form-control"
+                                        type="text" name="phone" value="{{ user_type.phone }}" disabled />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="working-place"><strong>Working Place</strong></label><input
+                                        class="form-control" type="text" name="working-place"
+                                        value="{{ user_type.working_place }}" disabled />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
             {% elif user_info.is_trainee %}
-                <div class="card shadow mb-3" id="trainee-info-page">
-                    <div class="card-header py-3">
-                        <p class="text-primary m-0 font-weight-bold">Trainee Info</p>
-                    </div>
-                    <div class="card-body">
-                        <form>
-                            <div class="form-row">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="education"><strong>Education</strong></label>
-                                        <input class="form-control" type="text" name="education"
-                                            value="{{ user_type.education }}" disabled />
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="phone"><strong>Phone</strong></label><input class="form-control"
-                                            type="text" name="phone" value="{{ user_type.phone }}" disabled />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="age"><strong>Age</strong></label><input class="form-control"
-                                            type="text" name="age" value="{{ user_type.age }}" disabled />
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="dot"><strong>Date of Birth</strong></label><input
-                                            class="form-control" type="text" name="dot" value="{{ user_type.dot }}"
-                                            disabled />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="experience"><strong>Experience</strong></label>
-                                        <input class="form-control" type="text" name="experience"
-                                            value="{{ user_type.experience }}" disabled />
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="toeic_score"><strong>Toeic</strong></label><input
-                                            class="form-control" type="text" name="toeic_score"
-                                            value="{{ user_type.toeic_score }}" disabled />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col">
-
-                                    <div class="form-group">
-                                        <label for="location"><strong>Location</strong></label><input
-                                            class="form-control" type="text" name="location"
-                                            value="{{ user_type.location }}" disabled />
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+            <div class="card shadow mb-3" id="trainee-info-page">
+                <div class="card-header py-3">
+                    <p class="text-primary m-0 font-weight-bold">Trainee Info</p>
                 </div>
+                <div class="card-body">
+                    <form>
+                        <div class="form-row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="education"><strong>Education</strong></label>
+                                    <input class="form-control" type="text" name="education"
+                                        value="{{ user_type.education }}" disabled />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="phone"><strong>Phone</strong></label><input class="form-control"
+                                        type="text" name="phone" value="{{ user_type.phone }}" disabled />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="age"><strong>Age</strong></label><input class="form-control" type="text"
+                                        name="age" value="{{ user_type.age }}" disabled />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="dot"><strong>Date of Birth</strong></label><input class="form-control"
+                                        type="text" name="dot" value="{{ user_type.dot }}" disabled />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="experience"><strong>Experience</strong></label>
+                                    <input class="form-control" type="text" name="experience"
+                                        value="{{ user_type.experience }}" disabled />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="toeic_score"><strong>Toeic</strong></label><input class="form-control"
+                                        type="text" name="toeic_score" value="{{ user_type.toeic_score }}" disabled />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+
+                                <div class="form-group">
+                                    <label for="location"><strong>Location</strong></label><input class="form-control"
+                                        type="text" name="location" value="{{ user_type.location }}" disabled />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
             {% endif %}
-        <div id="user-reset-password"></div>
-        <div id="user-update"></div>
-        <div id="user-update-profile"></div>
+            <div id="user-reset-password"></div>
+            <div id="user-update"></div>
+            <div id="user-update-profile"></div>
         </div>
     </div>
 </div>
