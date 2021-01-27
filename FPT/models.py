@@ -28,14 +28,8 @@ class User(AbstractUser):
             self.role = "Staff"
         elif self.is_trainer:
             self.role = "Trainer"
-            Trainer.objects.create(
-                user=self
-            )
         elif self.is_trainee:
             self.role = "Trainee"
-            Trainee.objects.create(
-                user=self
-            )
         return super().save(*args, **kwargs)
 
 

@@ -47,7 +47,7 @@ def create_course(request):
                 return redirect('FPT:courses')
             else:
                 messages.warning(request, "Your form is not valid for create course")
-                return redirect('FPT:courses')
+                return redirect('FPT:create-course')
         else:
             return render(request, 'course_create.html', {'upload_form': upload})
     messages.warning(request, "You don't have permission to action")
@@ -127,6 +127,8 @@ def update_course(request, course_id):
                 course_form.save()
                 messages.success(request, "Update course success")
                 return redirect("FPT:course-detail", course_id=course_self.id)
+            messages.warning(request, "Update Course form is not valid, try again")
+            return redirect("FPT:course-detail", course_id=course_self.id)
     messages.warning(request, "You don't have permission to action")
     return redirect("FPT:dashboard")
 
