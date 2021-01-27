@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
 
@@ -28,7 +28,10 @@ def create_category(request):
     if request.user.is_staff:
         upload = CategoryCreate()
         if request.method == 'POST':
-            check_category = Category.objects.get(name=request.POST["name"])
+            try:
+                check_category = Category.objects.get(name=request.POST["name"])
+            except Category.DoesNotExist:
+                check_category = None
             if check_category:
                 messages.warning(request, f"The category with name {check_category.name} is exist")
                 return redirect("FPT:create-category")
@@ -38,7 +41,7 @@ def create_category(request):
                 messages.success(request, "Create category success")
                 return redirect('FPT:categories')
             else:
-                messages.error(request, "Your form is not valid for create category")
+                messages.warning(request, "Your form is not valid for create category")
                 return redirect('FPT:categories')
         else:
             return render(request, 'category_create.html', {'upload_form': upload})
@@ -56,7 +59,7 @@ def category_detail(request, category_id):
         except Category.DoesNotExist:
             messages.error(request, "Not found category")
             return redirect("FPT:categories")
-        context ={
+        context = {
             "category": category_self
         }
         return render(request, 'category_detail.html', context)
@@ -82,7 +85,10 @@ def update_category(request, category_id):
             }
             return render(request, 'category_update.html', context)
         if request.method == 'POST':
-            check_category = Category.objects.get(name=request.POST["name"])
+            try:
+                check_category = Category.objects.get(name=request.POST["name"])
+            except Category.DoesNotExist:
+                check_category = None
             if check_category:
                 messages.warning(request, f"The category with name {check_category.name} is exist")
                 return redirect("FPT:category-detail", category_id=category_self.id)
@@ -91,6 +97,8 @@ def update_category(request, category_id):
                 category_form.save()
                 messages.success(request, "Update category success")
                 return redirect("FPT:category-detail", category_id=category_self.id)
+            messages.warning(request, "Update category is not valid, try again")
+            return redirect("FPT:category-detail", category_id=category_self.id)
     messages.warning(request, "You don't have permission to action")
     return redirect("FPT:dashboard")
 
