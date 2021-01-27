@@ -7,6 +7,7 @@ from .views.home import *
 from .views.assign import *
 from .views.accounts import *
 from .views.categories import *
+from .views.register import *
 from .views.user import *
 
 
@@ -60,6 +61,7 @@ urlpatterns = [
     path('reset-password/<int:user_id>/', reset_password, name='reset-password'),
     path('remove-user/<int:user_id>/', remove_user, name='remove-user'),
     path('search-users/', search_users, name='search-users'),
+    path('register-users/', register_users, name='register-users'),
     # User
     path('change-password/', change_password, name='change-password'),
     path('profile/', get_profile, name='profile'),
