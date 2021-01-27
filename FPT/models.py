@@ -74,7 +74,7 @@ class Category(models.Model):
 
 class Course(models.Model):
     name = models.CharField(max_length=50, unique=True)
-    category = models.ManyToManyField(Category, null=True, blank=True)
+    category = models.ManyToManyField(Category)
     description = models.TextField(null=True, blank=True)
     image = models.ImageField(null=True, blank=True)
     is_visible = models.BooleanField(default=True)

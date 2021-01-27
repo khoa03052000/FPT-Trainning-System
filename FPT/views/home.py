@@ -1,8 +1,11 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 
-from FPT.models import Course, Trainer, Trainee, User, Request, AssignUserToCourse
+from FPT.models import Course, Trainer, Trainee, Request, AssignUserToCourse
+
+User = get_user_model()
 
 
 def index(request):

@@ -31,17 +31,22 @@ def create_course(request):
     if request.user.is_staff:
         upload = CourseCreate()
         if request.method == 'POST':
-            check_course = Course.objects.get(name=request.POST["name"])
+            try:
+                check_course = Course.objects.get(name=request.POST["name"])
+            except Course.DoesNotExist:
+                check_course = None
+
             if check_course:
                 messages.warning(request, f"The course with name {check_course.name} is exist")
                 return redirect('FPT:create-course')
+
             upload = CourseCreate(request.POST, request.FILES)
             if upload.is_valid():
                 upload.save()
                 messages.success(request, "Create course success")
                 return redirect('FPT:courses')
             else:
-                messages.error(request, "Your form is not valid for create course")
+                messages.warning(request, "Your form is not valid for create course")
                 return redirect('FPT:courses')
         else:
             return render(request, 'course_create.html', {'upload_form': upload})
@@ -110,7 +115,10 @@ def update_course(request, course_id):
             }
             return render(request, 'course_update.html', context)
         if request.method == 'POST':
-            check_course = Course.objects.get(name=request.POST["name"])
+            try:
+                check_course = Course.objects.get(name=request.POST["name"])
+            except Course.DoesNotExist:
+                check_course = None
             if check_course:
                 messages.warning(request, f"The course with name {check_course.name} is exist")
                 return redirect("FPT:course-detail", course_id=course_self.id)
