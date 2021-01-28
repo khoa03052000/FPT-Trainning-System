@@ -1,9 +1,6 @@
 {% extends 'layout/base_dashboard.html' %} {% load static %} {% block content %}
 <div class="container-fluid" id="course-assign-div">
   <div class="row">
-{#      <div class="col-12 col-sm-6 col-md-6">#}
-{#      <a class="text-dark mb-4" ic-get-from="{% url 'FPT:course-detail' course.id %}"  ic-target="#course-detail-div" ic-replace-target="true">Back</a>#}
-{#    </div>#}
     <div class="col-12 col-sm-6 col-md-6">
       <h3 class="text-dark mb-4">Manage User Assigned</h3>
     </div>
@@ -11,39 +8,10 @@
   <div class="card" id="TableSorterCard-Trainer">
     <div class="card-header py-3">
       <div class="row table-topper align-items-center">
-        <div
-          class="col-12 col-sm-5 col-md-6 text-left"
-          style="margin: 0px; padding: 5px 15px"
-        >
+        <div class="col-12 col-sm-5 col-md-6 text-left" style="margin: 0px; padding: 5px 15px">
           <p class="text-primary m-0 font-weight-bold">List Trainer Assign</p>
         </div>
-        <div
-          class="col-12 col-sm-7 col-md-6 text-right"
-          style="margin: 0px; padding: 5px 15px"
-        >
-          <button
-            class="btn btn-primary btn-sm reset"
-            type="button"
-            style="margin: 2px"
-          >
-            Sort</button
-          ><button
-            class="btn btn-warning btn-sm"
-            id="zoom_in"
-            type="button"
-            zoomclick="ChangeZoomLevel(-10);"
-            style="margin: 2px"
-          >
-            <i class="fa fa-sort-up"></i></button
-          ><button
-            class="btn btn-warning btn-sm"
-            id="zoom_out"
-            type="button"
-            zoomclick="ChangeZoomLevel(-10);"
-            style="margin: 2px"
-          >
-            <i class="fa fa-sort-down"></i>
-          </button>
+        <div class="col-12 col-sm-7 col-md-6 text-right" style="margin: 0px; padding: 5px 15px">
         </div>
       </div>
     </div>
@@ -62,17 +30,16 @@
             <tbody class="text-center">
               {% for trainer in trainers %}
               <tr id="row-trainer-{{ trainer.user_id }}">
-                <td>{{ trainer.user.full_name }}</td>
+                <td>{{ trainer.user.username }}</td>
                 <td>{{ trainer.user.email }}</td>
                 <td>{{ trainer.phone }}</td>
                 <td class="text-center">
 
                   <a href="{% url 'FPT:change-trainer-assign' trainer.user_id %}" class="btn btn-success" role="button"
-                style="background: rgb(11,171,56);margin: 2px;"><i
-                    class="fas fa-pencil-alt"></i></a>
+                    style="background: rgb(11,171,56);margin: 2px;"><i class="fas fa-pencil-alt"></i></a>
                 </td>
               </tr>
-            {% endfor %}
+              {% endfor %}
             </tbody>
           </table>
         </div>
@@ -82,39 +49,10 @@
   <div class="card" id="TableSorterCard-Trainee">
     <div class="card-header py-3">
       <div class="row table-topper align-items-center">
-        <div
-          class="col-12 col-sm-5 col-md-6 text-left"
-          style="margin: 0px; padding: 5px 15px"
-        >
+        <div class="col-12 col-sm-5 col-md-6 text-left" style="margin: 0px; padding: 5px 15px">
           <p class="text-primary m-0 font-weight-bold">List Trainee Assign</p>
         </div>
-        <div
-          class="col-12 col-sm-7 col-md-6 text-right"
-          style="margin: 0px; padding: 5px 15px"
-        >
-          <button
-            class="btn btn-primary btn-sm reset"
-            type="button"
-            style="margin: 2px"
-          >
-            Sort</button
-          ><button
-            class="btn btn-warning btn-sm"
-            id="zoom_in"
-            type="button"
-            zoomclick="ChangeZoomLevel(-10);"
-            style="margin: 2px"
-          >
-            <i class="fa fa-sort-up"></i></button
-          ><button
-            class="btn btn-warning btn-sm"
-            id="zoom_out"
-            type="button"
-            zoomclick="ChangeZoomLevel(-10);"
-            style="margin: 2px"
-          >
-            <i class="fa fa-sort-down"></i>
-          </button>
+        <div class="col-12 col-sm-7 col-md-6 text-right" style="margin: 0px; padding: 5px 15px">
         </div>
       </div>
     </div>
@@ -132,17 +70,16 @@
             </thead>
             <tbody class="text-center">
               {% for trainee in trainees %}
-              <tr id ="row-trainee-{{ trainee.user_id }}">
-                <td>{{ trainee.user.full_name }}</td>
+              <tr id="row-trainee-{{ trainee.user_id }}">
+                <td>{{ trainee.user.username }}</td>
                 <td>{{ trainee.user.email }}</td>
                 <td>{{ trainee.phone }}</td>
                 <td class="text-center">
-                                      <a href="{% url 'FPT:change-trainee-assign' trainee.user_id %}" class="btn btn-success" role="button"
-                style="background: rgb(11,171,56);margin: 2px;"><i
-                    class="fas fa-pencil-alt"></i></a>
+                  <a href="{% url 'FPT:change-trainee-assign' trainee.user_id %}" class="btn btn-success" role="button"
+                    style="background: rgb(11,171,56);margin: 2px;"><i class="fas fa-pencil-alt"></i></a>
                 </td>
               </tr>
-            {% endfor %}
+              {% endfor %}
             </tbody>
           </table>
         </div>
@@ -151,4 +88,3 @@
   </div>
 </div>
 {% endblock %}
-

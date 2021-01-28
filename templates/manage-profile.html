@@ -1,8 +1,11 @@
 {% extends 'layout/base_dashboard.html' %}
 {% load static %}
+{% block title %}
+Profile: {{ user_info.username }}
+{% endblock %}
 {% block content %}
 <div class="container-fluid">
-    <h3 class="text-dark mb-4">Profile: {{ user_info.full_name }}</h3>
+    <h3 class="text-dark mb-4">Profile: {{ user_info.username }}</h3>
     <div class="row mb-3">
         <div class="col-lg-4">
             <div class="card mb-3">
@@ -18,36 +21,9 @@
                 </div>
             </div>
             <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="text-primary font-weight-bold m-0">Projects</h6>
-                </div>
-                <div class="card-body">
-                    <h4 class="small font-weight-bold">Server migration<span class="float-right">20%</span></h4>
-                    <div class="progress progress-sm mb-3">
-                        <div class="progress-bar bg-danger" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"
-                            style="width: 20%;"><span class="sr-only">20%</span></div>
-                    </div>
-                    <h4 class="small font-weight-bold">Sales tracking<span class="float-right">40%</span></h4>
-                    <div class="progress progress-sm mb-3">
-                        <div class="progress-bar bg-warning" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
-                            style="width: 40%;"><span class="sr-only">40%</span></div>
-                    </div>
-                    <h4 class="small font-weight-bold">Customer Database<span class="float-right">60%</span></h4>
-                    <div class="progress progress-sm mb-3">
-                        <div class="progress-bar bg-primary" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
-                            style="width: 60%;"><span class="sr-only">60%</span></div>
-                    </div>
-                    <h4 class="small font-weight-bold">Payout Details<span class="float-right">80%</span></h4>
-                    <div class="progress progress-sm mb-3">
-                        <div class="progress-bar bg-info" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"
-                            style="width: 80%;"><span class="sr-only">80%</span></div>
-                    </div>
-                    <h4 class="small font-weight-bold">Account setup<span class="float-right">Complete!</span></h4>
-                    <div class="progress progress-sm mb-3">
-                        <div class="progress-bar bg-success" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
-                            style="width: 100%;"><span class="sr-only">100%</span></div>
-                    </div>
-                </div>
+                <div id="user-reset-password"></div>
+                <div id="user-update"></div>
+                <div id="user-update-profile"></div>
             </div>
         </div>
         <div class="col-lg-8">
@@ -140,24 +116,26 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-row" style="justify-content:space-between">
-                                    <div class="form-group">
-                                        <a ic-get-from="{% url 'FPT:change-profile-user' user_info.id %}"
-                                            ic-target="#user-update" ic-replace-target="false">
-                                            <button class="btn btn-primary btn-sm" type="button">
-                                                Update
-                                            </button>
-                                        </a>
-                                    </div>
-                                    <div class="form-group">
-                                        <a ic-get-from="{% url 'FPT:reset-password' user_info.id %}"
-                                            ic-target="#user-update" ic-replace-target="false">
-                                            <button class="btn btn-dark btn-sm" type="button">
-                                                Reset password
-                                            </button>
-                                        </a>
-                                    </div>
+                            {% if user__info.is_trainer is False %}
+                            <div class="form-row" style="justify-content:space-between">
+                                <div class="form-group">
+                                    <a ic-get-from="{% url 'FPT:change-profile-user' user_info.id %}"
+                                        ic-target="#user-update" ic-replace-target="false">
+                                        <button class="btn btn-primary btn-sm" type="button">
+                                            Update
+                                        </button>
+                                    </a>
                                 </div>
+                                <div class="form-group">
+                                    <a ic-get-from="{% url 'FPT:reset-password' user_info.id %}" ic-target="#user-update"
+                                        ic-replace-target="false">
+                                        <button class="btn btn-dark btn-sm" type="button">
+                                            Reset password
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
+                            {% endif %}
                             </form>
                         </div>
 
@@ -172,116 +150,161 @@
                 </div>
             </div>
             {% elif user_info.is_trainer %}
+                {% if user_type %}
+                <div class="card shadow mb-3" id="trainer-info-page">
+                <div class="card-header py-3">
+                    <p class="text-primary m-0 font-weight-bold">Trainer Info</p>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="form-row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="education"><strong>Education</strong></label>
+                                    <input class="form-control" type="text" name="education"
+                                        value="{{ user_type.education }}" disabled />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="phone"><strong>Phone</strong></label><input class="form-control"
+                                        type="text" name="phone" value="{{ user_type.phone }}" disabled />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="working-place"><strong>Working Place</strong></label><input
+                                        class="form-control" type="text" name="working-place"
+                                        value="{{ user_type.working_place }}" disabled />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="type"><strong>Type</strong></label><input class="form-control"
+                                        type="text" name="type" value="{{ user_type.type }}" disabled />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row" style="justify-content:space-between">
+                            <div class="form-group">
+                                <a ic-get-from="{% url 'FPT:change-profile-trainer' user_info.id %}"
+                                    ic-target="#user-update" ic-replace-target="false">
+                                    <button class="btn btn-primary btn-sm" type="button">
+                                        Update
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="form-group">
+                                <a href="{% url 'FPT:remove-trainer' user_info.id %}">
+                                    <button class="btn btn-dark btn-sm" type="button">
+                                        Delete Info
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+                    {% else %}
                 <div class="card shadow mb-3" id="trainer-info-page">
                     <div class="card-header py-3">
-                        <p class="text-primary m-0 font-weight-bold">Trainer Info</p>
-                    </div>
-                    <div class="card-body">
-                        <form>
-                            <div class="form-row">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="education"><strong>Education</strong></label>
-                                        <input class="form-control" type="text" name="education"
-                                            value="{{ user_type.education }}" disabled />
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="phone"><strong>Phone</strong></label><input class="form-control"
-                                            type="text" name="phone" value="{{ user_type.phone }}" disabled />
-                                    </div>
-                                </div>
+                        <p class="text-primary m-0 font-weight-bold">No {{ user_info.role }} Info</p>
+                        <div class="form-group">
+                            <a ic-get-from="{% url 'FPT:add-trainer' user_info.id %}" ic-target="#user-update"
+                                    ic-replace-target="false">
+                                    <button class="btn btn-dark btn-sm" type="button">
+                                        Add Trainer Info
+                                    </button>
+                            </a>
+                            <div class="form-group">
+                                <a ic-get-from="{% url 'FPT:change-profile-trainer' user_info.id %}"
+                                    ic-target="#user-update" ic-replace-target="false">
+                                    <button class="btn btn-primary btn-sm" type="button">
+                                        Update
+                                    </button>
+                                </a>
                             </div>
-                            <div class="form-row">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="working-place"><strong>Working Place</strong></label><input
-                                            class="form-control" type="text" name="working-place"
-                                            value="{{ user_type.working_place }}" disabled />
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="type"><strong>Type</strong></label><input class="form-control"
-                                            type="text" name="type" value="{{ user_type.type.get_type_display }}"
-                                            disabled />
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            {% elif user_info.is_trainee %}
-                <div class="card shadow mb-3" id="trainee-info-page">
-                    <div class="card-header py-3">
-                        <p class="text-primary m-0 font-weight-bold">Trainee Info</p>
-                    </div>
-                    <div class="card-body">
-                        <form>
-                            <div class="form-row">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="education"><strong>Education</strong></label>
-                                        <input class="form-control" type="text" name="education"
-                                            value="{{ user_type.education }}" disabled />
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="phone"><strong>Phone</strong></label><input class="form-control"
-                                            type="text" name="phone" value="{{ user_type.phone }}" disabled />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="age"><strong>Age</strong></label><input class="form-control"
-                                            type="text" name="age" value="{{ user_type.age }}" disabled />
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="dot"><strong>Date of Birth</strong></label><input
-                                            class="form-control" type="text" name="dot" value="{{ user_type.dot }}"
-                                            disabled />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="experience"><strong>Experience</strong></label>
-                                        <input class="form-control" type="text" name="experience"
-                                            value="{{ user_type.experience }}" disabled />
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="toeic_score"><strong>Toeic</strong></label><input
-                                            class="form-control" type="text" name="toeic_score"
-                                            value="{{ user_type.toeic_score }}" disabled />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col">
+                        </div>
 
-                                    <div class="form-group">
-                                        <label for="location"><strong>Location</strong></label><input
-                                            class="form-control" type="text" name="location"
-                                            value="{{ user_type.location }}" disabled />
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
                     </div>
                 </div>
+                {% endif %}
+            {% elif user_info.is_trainee %}
+            <div class="card shadow mb-3" id="trainee-info-page">
+                <div class="card-header py-3">
+                    <p class="text-primary m-0 font-weight-bold">Trainee Info</p>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="form-row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="education"><strong>Education</strong></label>
+                                    <input class="form-control" type="text" name="education"
+                                        value="{{ user_type.education }}" disabled />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="phone"><strong>Phone</strong></label><input class="form-control"
+                                        type="text" name="phone" value="{{ user_type.phone }}" disabled />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="age"><strong>Age</strong></label><input class="form-control" type="text"
+                                        name="age" value="{{ user_type.age }}" disabled />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="dot"><strong>Date of Birth</strong></label><input class="form-control"
+                                        type="text" name="dot" value="{{ user_type.dot }}" disabled />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="experience"><strong>Experience</strong></label>
+                                    <input class="form-control" type="text" name="experience"
+                                        value="{{ user_type.experience }}" disabled />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="toeic_score"><strong>Toeic</strong></label><input class="form-control"
+                                        type="text" name="toeic_score" value="{{ user_type.toeic_score }}" disabled />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+
+                                <div class="form-group">
+                                    <label for="location"><strong>Location</strong></label><input class="form-control"
+                                        type="text" name="location" value="{{ user_type.location }}" disabled />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row" style="justify-content:space-between">
+                            <div class="form-group">
+                                <a ic-get-from="{% url 'FPT:change-profile-trainee' user_info.id %}"
+                                    ic-target="#user-update" ic-replace-target="false">
+                                    <button class="btn btn-primary btn-sm" type="button">
+                                        Update
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
             {% endif %}
-        <div id="user-reset-password"></div>
-        <div id="user-update"></div>
-        <div id="user-update-profile"></div>
         </div>
     </div>
 </div>

@@ -1,0 +1,49 @@
+{% extends 'layout/base_dashboard.html' %}
+{% load static %}
+{% block css %}
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="card shadow-lg o-hidden border-0 my-5">
+            <div class="card-body p-0" id="trainee_info">
+                <div class="row">
+                    <div class="col-lg-5 d-none d-lg-flex">
+                        <div class="flex-grow-1 bg-register-image" style="background-image: url({% static 'img/logo.png' %});"></div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h4 class="text-dark mb-4">Create an Trainee !</h4>
+                            </div>
+                            <form class="user"
+                                  action="{% url 'FPT:register-users' %}"
+                                  method="POST">
+                                <div class="form-group row">
+                                    {% csrf_token %}
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <input class="form-control form-control-user" type="text" placeholder="Username" name="username" maxlength="150" autocapitalize="none" autocomplete="username" autofocus="" required="" id="id_username">
+                                    </div>
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <input class="form-control form-control-user" type="email" placeholder="email" name="email" maxlength="150" autocapitalize="none" autocomplete="email" autofocus="" required="" id="id_email">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <input class="form-control form-control-user" type="password" autocomplete="new-password" required="" id="id_password1" placeholder="Password" name="password1"></div>
+                                    <div class="col-sm-6">
+                                        <input class="form-control form-control-user" type="password" autocomplete="new-password" required="" id="id_password2" placeholder="Repeat Password" name="password2"></div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <input class="form-control form-control-user" type="hidden" autocomplete="roles" required="" id="roles" value="trainee" name="roles">
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary btn-block text-white btn-user" type="submit">Register Account</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

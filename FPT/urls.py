@@ -7,6 +7,7 @@ from .views.home import *
 from .views.assign import *
 from .views.accounts import *
 from .views.categories import *
+from .views.register import *
 from .views.user import *
 
 
@@ -53,20 +54,28 @@ urlpatterns = [
     # User - Manage - Staff
     path('register/', get_dashboard, name='register'),
     path('account-manage/', account_manage, name='account-manage'),
+    path('account-manage-trainer/', account_manage_trainer, name='account-manage-trainer'),
     path('manage-profile/<int:user_id>/', manage_profile, name='manage-profile'),
+    path('add-trainer/<int:user_id>/', add_trainer, name='add-trainer'),
+
     path('change-profile-user/<int:user_id>/', change_profile_user, name='change-profile-user'),
     path('change-profile-trainer/<int:user_id>/', change_profile_trainer, name='change-profile-trainer'),
     path('change-profile-trainee/<int:user_id>/', change_profile_trainee, name='change-profile-trainee'),
     path('reset-password/<int:user_id>/', reset_password, name='reset-password'),
     path('remove-user/<int:user_id>/', remove_user, name='remove-user'),
+    path('remove-trainer/<int:user_id>/', remove_trainer, name='remove-trainer'),
     path('search-users/', search_users, name='search-users'),
+    path('register-users/', register_users, name='register-users'),
+
     # User
     path('change-password/', change_password, name='change-password'),
     path('profile/', get_profile, name='profile'),
     path('change-profile/', change_profile, name='change-profile'),
+    path('update-profile-trainee/', update_profile_trainee, name='update-profile-trainee'),
+    path('update-profile-trainer/', update_profile_trainer, name='update-profile-trainer'),
     # TODO: VIEW COURSE ASSIGN
     # TODO; REQUEST COURSE
 ]
-
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

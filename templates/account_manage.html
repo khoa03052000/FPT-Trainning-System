@@ -1,28 +1,28 @@
-{% extends 'layout/base_dashboard.html' %} {% load static %} {% block content %}
+{% extends 'layout/base_dashboard.html' %} {% load static %}
+{% block title %}
+   Manage Accounts
+{% endblock %}
+{% block content %}
 <div class="container-fluid">
-    <h3 class="text-dark mb-4">Team</h3>
+    <h3 class="text-dark mb-4">Trainees</h3>
     <div class="card shadow">
-        <div class="card-header py-3">
-            <p class="text-primary m-0 font-weight-bold">Employee Info</p>
-        </div>
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6 text-nowrap">
 
-<form
-                                action="{% url 'FPT:search-users' %}" method="post"
-                            class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                            {% csrf_token %}
-                            <div class="input-group">
-                                <input class="bg-light form-control border-0 small" type="text"
-                                    placeholder="Search for ..." name="q" />
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary py-0" type="submit">
-                                        <i class="fas fa-search"></i>
-                                    </button>
-                                </div>
+                    <form action="{% url 'FPT:search-users' %}" method="post"
+                        class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input class="bg-light form-control border-0 small" type="text" placeholder="Search for ..."
+                                name="q" />
+                            <div class="input-group-append">
+                                <button class="btn btn-primary py-0" type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
                             </div>
-                        </form>
+                        </div>
+                    </form>
                 </div>
             </div>
             <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
@@ -31,37 +31,41 @@
                         <tr>
                             <th>Avatar</th>
                             <th>FullName</th>
-                            <th>UserName</th>
-                            <th>Email</th>
-                            <th>Role</th>
+                            <th>Age</th>
+                            <th>Date of Birth</th>
+                            <th>Education</th>
+                            <th>Location</th>
+                            <th>TOEIC Scope</th>
+                            <th>Experience</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for user_info in users_info %}
-                        <tr id ="row-user-{{ user_info.id }}">
+                        {% for trainee in trainees %}
+                        <tr id="row-user-{{ trainee.user.id }}">
                             <td>
-                                {% if user_info.avatar.url is not None %}
+                                {% if trainee.user.avatar.url is not None %}
                                 <img class="border rounded-circle img-profile" style="width:5rem;height:5rem"
-                                    src="{{ user_info.avatar.url }}">
+                                    src="{{ trainee.user.avatar.url }}">
                                 {% else %}
                                 <p>No Avatar</p>
                                 {% endif %}
                             </td>
-                            <td>{{ user_info.full_name }}</td>
-                            <td>{{ user_info.username }}</td>
-                            <td>{{ user_info.email }}</td>
-                            <td>{{ user_info.role }}</td>
-                            <td class="text-center">
-                                <a class="btn btn-primary" role="button" style="margin: 2px;"><i
-                                        class="far fa-eye"></i></a>
-                                <a href="{% url 'FPT:manage-profile' user_info.id %}" class="btn btn-success" role="button"
-                                    style="background: rgb(11,171,56);margin: 2px;"><i
+                            <td>{{ trainee.user.full_name }}</td>
+                            <td>{{ trainee.age }}</td>
+                            <td>{{ trainee.dot }}</td>
+                            <td>{{ trainee.education }}</td>
+                            <td>{{ trainee.location }}</td>
+                            <td>{{ trainee.toeic_score }}</td>
+                            <td>{{ trainee.experience }}</td>
+                            <td>
+                                <a href="{% url 'FPT:manage-profile' trainee.user.id %}" class="btn btn-success"
+                                    role="button" style="background: rgb(11,171,56);margin: 2px;"><i
                                         class="fas fa-pencil-alt"></i></a>
                                 <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" id="token">
-                                <a class="btn btn-danger" role="button" style="margin: 2px;" ic-action="remove" ic-confirm = "Are you sure?"
-                                    ic-target="#row-user-{{ user_info.id }}" ic-include="#token"
-                                    ic-delete-from="{% url 'FPT:remove-user' user_info.id %}">
+                                <a class="btn btn-danger" role="button" style="margin: 2px;" ic-action="remove"
+                                    ic-confirm="Are you sure?" ic-target="#row-user-{{ trainee.user.id }}"
+                                    ic-include="#token" ic-delete-from="{% url 'FPT:remove-user' trainee.user.id %}">
                                     <i class="fas fa-trash"></i>
 
                                 </a>

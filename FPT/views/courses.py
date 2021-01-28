@@ -31,18 +31,20 @@ def create_course(request):
     if request.user.is_staff:
         upload = CourseCreate()
         if request.method == 'POST':
-            check_course = Course.objects.get(name=request.POST["name"])
-            if check_course:
+
+            check_course = Course.objects.filter(name=request.POST["name"])
+            if check_course.exists():
                 messages.warning(request, f"The course with name {check_course.name} is exist")
                 return redirect('FPT:create-course')
+
             upload = CourseCreate(request.POST, request.FILES)
             if upload.is_valid():
                 upload.save()
                 messages.success(request, "Create course success")
                 return redirect('FPT:courses')
             else:
-                messages.error(request, "Your form is not valid for create course")
-                return redirect('FPT:courses')
+                messages.warning(request, "Your form is not valid for create course")
+                return redirect('FPT:create-course')
         else:
             return render(request, 'course_create.html', {'upload_form': upload})
     messages.warning(request, "You don't have permission to action")
@@ -62,8 +64,12 @@ def course_detail(request, course_id):
 
         assign_user = AssignUserToCourse.objects.filter(course__id=course_id)
 
-        trainer_type = ContentType.objects.get_for_model(Trainer)
-        trainee_type = ContentType.objects.get_for_model(Trainee)
+        try:
+            trainer_type = ContentType.objects.get_for_model(Trainer)
+            trainee_type = ContentType.objects.get_for_model(Trainee)
+        except ContentType.DoesNotExist:
+            messages.error(request, "Not found Trainer and Trainee")
+            return redirect("FPT:courses")
 
         trainers = [
             u.assigned_user
@@ -110,8 +116,9 @@ def update_course(request, course_id):
             }
             return render(request, 'course_update.html', context)
         if request.method == 'POST':
-            check_course = Course.objects.get(name=request.POST["name"])
-            if check_course:
+
+            check_course = Course.objects.filter(name=request.POST["name"])
+            if check_course.exists():
                 messages.warning(request, f"The course with name {check_course.name} is exist")
                 return redirect("FPT:course-detail", course_id=course_self.id)
             course_form = CourseCreate(request.POST, request.FILES, instance=course_self)
@@ -119,6 +126,8 @@ def update_course(request, course_id):
                 course_form.save()
                 messages.success(request, "Update course success")
                 return redirect("FPT:course-detail", course_id=course_self.id)
+            messages.warning(request, "Update Course form is not valid, try again")
+            return redirect("FPT:course-detail", course_id=course_self.id)
     messages.warning(request, "You don't have permission to action")
     return redirect("FPT:dashboard")
 
@@ -172,13 +181,12 @@ def search_courses(request):
         if request.method == "POST":
             courses = Course.objects.filter(
                 Q(name__icontains=request.POST["q"]) |
-                Q(description__icontains=request.POST["q"])
+                Q(description__icontains=request.POST["q"]) |
+                Q(category__name__icontains=request.POST["q"])
             )
-            if courses.count() > 0:
+            if courses.exists():
                 messages.success(request, f"Search courses success with {courses.count()} results")
-                context = {
-                    "courses": courses
-                }
+                context = {"courses": courses}
                 return render(request, "course.html", context)
 
             messages.warning(request, f"Not found category {request.POST['q']}")

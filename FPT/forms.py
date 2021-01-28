@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
 
 from FPT.models import Course, Category, Trainer, Trainee
 
@@ -25,7 +26,7 @@ class CategoryCreate(forms.ModelForm):
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ["email", "first_name", "last_name", "department", "avatar"]
+        fields = ["first_name", "last_name", "department", "avatar"]
 
 
 class TrainerForm(forms.ModelForm):
@@ -51,3 +52,26 @@ class TraineeForm(forms.ModelForm):
             "toeic_score",
             "experience"
         ]
+
+
+ROLE_CHOICES = [
+    ('trainee', 'Trainee'),
+]
+
+
+class UserFPTCreationForm(UserCreationForm):
+    roles = forms.CharField(label='Choose role', widget=forms.Select(choices=ROLE_CHOICES))
+
+    class Meta(UserCreationForm):
+        model = User
+        fields = ('username', 'email',)
+
+    def save(self, commit=True):
+        if not commit:
+            raise NotImplementedError("Can't create User and UserProfile without database save")
+        user = super(UserFPTCreationForm, self).save(commit=True)
+        user.is_trainee = True
+        user_info = Trainee(user=user)
+        user_info.save()
+        user.save()
+        return user, user_info
