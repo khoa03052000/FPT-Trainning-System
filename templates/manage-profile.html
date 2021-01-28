@@ -1,7 +1,7 @@
 {% extends 'layout/base_dashboard.html' %}
 {% load static %}
 {% block title %}
-    Profile: {{ user_info.username }}
+Profile: {{ user_info.username }}
 {% endblock %}
 {% block content %}
 <div class="container-fluid">
@@ -21,9 +21,9 @@
                 </div>
             </div>
             <div class="card shadow mb-4">
-            <div id="user-reset-password"></div>
-            <div id="user-update"></div>
-            <div id="user-update-profile"></div>
+                <div id="user-reset-password"></div>
+                <div id="user-update"></div>
+                <div id="user-update-profile"></div>
             </div>
         </div>
         <div class="col-lg-8">
@@ -116,24 +116,26 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-row" style="justify-content:space-between">
-                                    <div class="form-group">
-                                        <a ic-get-from="{% url 'FPT:change-profile-user' user_info.id %}"
-                                            ic-target="#user-update" ic-replace-target="false">
-                                            <button class="btn btn-primary btn-sm" type="button">
-                                                Update
-                                            </button>
-                                        </a>
-                                    </div>
-                                    <div class="form-group">
-                                        <a ic-get-from="{% url 'FPT:reset-password' user_info.id %}"
-                                            ic-target="#user-update" ic-replace-target="false">
-                                            <button class="btn btn-dark btn-sm" type="button">
-                                                Reset password
-                                            </button>
-                                        </a>
-                                    </div>
+                            {% if user__info.is_trainer is False %}
+                            <div class="form-row" style="justify-content:space-between">
+                                <div class="form-group">
+                                    <a ic-get-from="{% url 'FPT:change-profile-user' user_info.id %}"
+                                        ic-target="#user-update" ic-replace-target="false">
+                                        <button class="btn btn-primary btn-sm" type="button">
+                                            Update
+                                        </button>
+                                    </a>
                                 </div>
+                                <div class="form-group">
+                                    <a ic-get-from="{% url 'FPT:reset-password' user_info.id %}" ic-target="#user-update"
+                                        ic-replace-target="false">
+                                        <button class="btn btn-dark btn-sm" type="button">
+                                            Reset password
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
+                            {% endif %}
                             </form>
                         </div>
 
@@ -148,7 +150,8 @@
                 </div>
             </div>
             {% elif user_info.is_trainer %}
-            <div class="card shadow mb-3" id="trainer-info-page">
+                {% if user_type %}
+                <div class="card shadow mb-3" id="trainer-info-page">
                 <div class="card-header py-3">
                     <p class="text-primary m-0 font-weight-bold">Trainer Info</p>
                 </div>
@@ -180,14 +183,54 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="type"><strong>Type</strong></label><input class="form-control"
-                                        type="text" name="type" value="{{ user_type.type }}"
-                                        disabled />
+                                        type="text" name="type" value="{{ user_type.type }}" disabled />
                                 </div>
+                            </div>
+                        </div>
+                        <div class="form-row" style="justify-content:space-between">
+                            <div class="form-group">
+                                <a ic-get-from="{% url 'FPT:change-profile-trainer' user_info.id %}"
+                                    ic-target="#user-update" ic-replace-target="false">
+                                    <button class="btn btn-primary btn-sm" type="button">
+                                        Update
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="form-group">
+                                <a href="{% url 'FPT:remove-trainer' user_info.id %}">
+                                    <button class="btn btn-dark btn-sm" type="button">
+                                        Delete Info
+                                    </button>
+                                </a>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
+                    {% else %}
+                <div class="card shadow mb-3" id="trainer-info-page">
+                    <div class="card-header py-3">
+                        <p class="text-primary m-0 font-weight-bold">No {{ user_info.role }} Info</p>
+                        <div class="form-group">
+                            <a ic-get-from="{% url 'FPT:add-trainer' user_info.id %}" ic-target="#user-update"
+                                    ic-replace-target="false">
+                                    <button class="btn btn-dark btn-sm" type="button">
+                                        Add Trainer Info
+                                    </button>
+                            </a>
+                            <div class="form-group">
+                                <a ic-get-from="{% url 'FPT:change-profile-trainer' user_info.id %}"
+                                    ic-target="#user-update" ic-replace-target="false">
+                                    <button class="btn btn-primary btn-sm" type="button">
+                                        Update
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                {% endif %}
             {% elif user_info.is_trainee %}
             <div class="card shadow mb-3" id="trainee-info-page">
                 <div class="card-header py-3">
@@ -246,6 +289,16 @@
                                     <label for="location"><strong>Location</strong></label><input class="form-control"
                                         type="text" name="location" value="{{ user_type.location }}" disabled />
                                 </div>
+                            </div>
+                        </div>
+                        <div class="form-row" style="justify-content:space-between">
+                            <div class="form-group">
+                                <a ic-get-from="{% url 'FPT:change-profile-trainee' user_info.id %}"
+                                    ic-target="#user-update" ic-replace-target="false">
+                                    <button class="btn btn-primary btn-sm" type="button">
+                                        Update
+                                    </button>
+                                </a>
                             </div>
                         </div>
                     </form>

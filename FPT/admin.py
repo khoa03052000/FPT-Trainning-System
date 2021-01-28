@@ -14,10 +14,8 @@ class UserAdmin(auth_admin.UserAdmin):
             {
                 "fields": (
                     "is_trainer",
-                    "is_trainee",
                     "avatar",
                     "full_name",
-                    "role"
                 )
             },
         ),

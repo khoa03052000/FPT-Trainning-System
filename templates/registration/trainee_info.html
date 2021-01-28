@@ -1,0 +1,71 @@
+<div class="row">
+    <div class="col">
+        <div class="card shadow mb-3" id="user-info">
+            <div class="card-header py-3">
+                <p class="text-primary m-0 font-weight-bold">Trainee Info</p>
+            </div>
+            <div class="card-body">
+                <form action="{% url 'FPT:change-profile-trainee' user_info.id %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="education"><strong>Education</strong></label>
+                                <input class="form-control" type="text" name="education"
+                                    value="{{ user_type.education }}" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="phone"><strong>Phone</strong></label><input class="form-control" type="text"
+                                    name="phone" value="{{ user_type.phone }}" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="age"><strong>Age</strong></label><input class="form-control" type="text"
+                                    name="age" value="{{ user_type.age }}" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="dot"><strong>Date of Birth</strong></label><input class="form-control"
+                                    type="date" name="dot" value="{{ user_type.dot }}" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="experience"><strong>Experience</strong></label>
+                                <input class="form-control" type="text" name="experience"
+                                    value="{{ user_type.experience }}" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="toeic_score"><strong>Toeic</strong></label><input class="form-control"
+                                    type="text" name="toeic_score" value="{{ user_type.toeic_score }}" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="location"><strong>Location</strong></label><input class="form-control"
+                                    type="text" name="location" value="{{ user_type.location }}" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-sm" type="submit">Save&nbsp;</button>
+                        <button class="btn btn-danger submit-button" type="button" ic-action="remove"
+                            ic-target="#user-info">No Change</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

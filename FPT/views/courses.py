@@ -181,7 +181,8 @@ def search_courses(request):
         if request.method == "POST":
             courses = Course.objects.filter(
                 Q(name__icontains=request.POST["q"]) |
-                Q(description__icontains=request.POST["q"])
+                Q(description__icontains=request.POST["q"]) |
+                Q(category__name__icontains=request.POST["q"])
             )
             if courses.exists():
                 messages.success(request, f"Search courses success with {courses.count()} results")

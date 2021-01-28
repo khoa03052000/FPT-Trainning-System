@@ -71,14 +71,14 @@
                                     <div class="col">
                                         <div class="form-group">
                                             <label for="username"><strong>Username</strong></label>
-                                            <input class="form-control" type="text" name="username"
+                                            <input class="form-control"
                                                 value="{{ user.username }}" disabled />
                                         </div>
                                     </div>
                                     <div class="col">
                                         <div class="form-group">
                                             <label for="email"><strong>Email Address</strong></label><input
-                                                class="form-control" type="email" name="email" value="{{ user.email }}"
+                                                class="form-control" value="{{ user.email }}"
                                                 disabled />
                                         </div>
                                     </div>
@@ -87,7 +87,7 @@
                                     <div class="col">
                                         <div class="form-group">
                                             <label for="first_name"><strong>First Name</strong></label><input
-                                                class="form-control" type="text" name="first_name"
+                                                class="form-control"
                                                 value="{{ user.first_name }}" disabled />
                                         </div>
                                     </div>
@@ -103,14 +103,14 @@
                                     <div class="col">
                                         <div class="form-group">
                                             <label for="first_name"><strong>Department</strong></label><input
-                                                class="form-control" type="text" name="first_name"
+                                                class="form-control"
                                                 value="{{ user.department }}" disabled />
                                         </div>
                                     </div>
                                     <div class="col">
                                         <div class="form-group">
                                             <label for="last_name"><strong>Role</strong></label><input
-                                                class="form-control" type="text" name="last_name"
+                                                class="form-control"
                                                 value="{{ user.role }}" disabled />
                                         </div>
                                     </div>
@@ -140,7 +140,6 @@
                 </div>
             </div>
             {% if user.is_staff or user.is_superuser %}
-
             <div class="card shadow" id="trainer-info-page">
                 <div class="card-header py-3">
                     <p class="text-primary m-0 font-weight-bold">No {{ user.role }} Info</p>
@@ -156,14 +155,14 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="education"><strong>Education</strong></label>
-                                        <input class="form-control" type="text" name="education"
+                                        <input class="form-control"
                                             value="{{ user_type.education }}" disabled />
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="phone"><strong>Phone</strong></label><input class="form-control"
-                                            type="text" name="phone" value="{{ user_type.phone }}" disabled />
+                                            value="{{ user_type.phone }}" disabled />
                                     </div>
                                 </div>
                             </div>
@@ -171,14 +170,14 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="working-place"><strong>Working Place</strong></label><input
-                                            class="form-control" type="text" name="working-place"
+                                            class="form-control"
                                             value="{{ user_type.working_place }}" disabled />
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="type"><strong>Type</strong></label><input class="form-control"
-                                            type="text" name="type" value="{{ user_type.type }}" disabled />
+                                             value="{{ user_type.type }}" disabled />
                                     </div>
                                 </div>
                             </div>
@@ -196,14 +195,14 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="education"><strong>Education</strong></label>
-                                        <input class="form-control" type="text" name="education"
+                                        <input class="form-control"
                                             value="{{ user_type.education }}" disabled />
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="phone"><strong>Phone</strong></label><input class="form-control"
-                                            type="text" name="phone" value="{{ user_type.phone }}" disabled />
+                                            t value="{{ user_type.phone }}" disabled />
                                     </div>
                                 </div>
                             </div>
@@ -211,13 +210,13 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="age"><strong>Age</strong></label><input class="form-control"
-                                            type="text" name="age" value="{{ user_type.age }}" disabled />
+                                            t value="{{ user_type.age }}" disabled />
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="dot"><strong>Date of Birth</strong></label><input
-                                            class="form-control" type="text" name="dot" value="{{ user_type.dot }}"
+                                            class="form-control"  value="{{ user_type.dot }}"
                                             disabled />
                                     </div>
                                 </div>
@@ -226,14 +225,14 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="experience"><strong>Experience</strong></label>
-                                        <input class="form-control" type="text" name="experience"
+                                        <input class="form-control"
                                             value="{{ user_type.experience }}" disabled />
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="toeic_score"><strong>Toeic</strong></label><input
-                                            class="form-control" type="text" name="toeic_score"
+                                            class="form-control"
                                             value="{{ user_type.toeic_score }}" disabled />
                                     </div>
                                 </div>
@@ -252,7 +251,6 @@
                     </div>
                 </div>
                 {% endif %}
-
             </div>
         </div>
     </div>

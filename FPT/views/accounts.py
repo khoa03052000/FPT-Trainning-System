@@ -19,12 +19,34 @@ def account_manage(request):
     if request.user.is_staff:
         users = User.objects.exclude(
             Q(is_staff=True) |
-            Q(is_superuser=True)
+            Q(is_superuser=True) |
+            Q(is_trainer=True) |
+            Q(is_trainee=False)
         )
+        trainees = Trainee.objects.filter(pk__in=[user.id for user in users])
         context = {
-            "users_info": users,
+            "trainees": trainees,
         }
         return render(request, "account_manage.html", context)
+    messages.warning(request, "You don't have permission to action")
+    return redirect("FPT:dashboard")
+
+
+@login_required
+@require_http_methods(["GET"])
+def account_manage_trainer(request):
+    if request.user.is_staff:
+        users = User.objects.exclude(
+            Q(is_staff=True) |
+            Q(is_superuser=True) |
+            Q(is_trainee=True) |
+            Q(is_trainer=False)
+        )
+        trainers = Trainer.objects.filter(pk__in=[user.id for user in users])
+        context = {
+            "trainers": trainers,
+        }
+        return render(request, "account_manage_trainer.html", context)
     messages.warning(request, "You don't have permission to action")
     return redirect("FPT:dashboard")
 
@@ -39,27 +61,40 @@ def manage_profile(request, user_id):
             messages.error(request, "Not found User in system")
             return redirect('FPT:account-manage')
 
-        if user.is_staff or user.is_superuser:
-            messages.warning(request, "You don't have permission to action")
-            return redirect("FPT:account-manage")
-
         context = {
             "user_info": user,
         }
-        try:
-            if user.is_trainer:
+        if user.is_trainer:
+            try:
                 trainer = Trainer.objects.get(pk=user.id)
                 context["user_type"] = trainer
-            elif user.is_trainee:
+            except Trainer.DoesNotExist:
+                context["user_type"] = None
+        if user.is_trainee:
+            try:
                 trainee = Trainee.objects.get(pk=user.id)
                 context["user_type"] = trainee
-            else:
+            except Trainee.DoesNotExist:
                 context["user_type"] = None
-        except Trainee.DoesNotExist or Trainer.DoesNotExist:
-            messages.error(request, "Can not find info user ")
-            return redirect("FPT:account-manage")
-
         return render(request, 'manage-profile.html', context)
+    messages.warning(request, "You don't have permission to action")
+    return redirect("FPT:dashboard")
+
+
+@require_http_methods(["GET", "POST"])
+@login_required
+def add_trainer(request, user_id):
+    if request.user.is_staff:
+        try:
+            user = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            messages.error(request, "Not found User in system")
+            return redirect("FPT:account-manage")
+        if user.is_trainer:
+            Trainer.objects.create(user=user)
+            return redirect("FPT:change-profile-trainer", user.id)
+        messages.warning(request, "User no is trainer")
+        return redirect("FPT:manage-profile", user.id)
     messages.warning(request, "You don't have permission to action")
     return redirect("FPT:dashboard")
 
@@ -73,35 +108,30 @@ def change_profile_user(request, user_id):
         except User.DoesNotExist:
             messages.error(request, "Not found User in system")
             return redirect("FPT:account-manage")
-        if request.method == 'POST':
-            user_change = UserForm(request.POST, request.FILES, instance=user)
-            if user_change.is_valid():
-                user_change.save()
-                messages.success(request, "Update User info success")
+        if user.is_trainee:
+            if request.method == 'POST':
+                user_change = UserForm(request.POST, request.FILES, instance=user)
+                if user_change.is_valid():
+                    user_change.save()
+                    messages.success(request, "Update User info success")
+                    return redirect("FPT:manage-profile", user.id)
+                messages.error(request, "Update User info error, try again")
                 return redirect("FPT:manage-profile", user.id)
-        if user.is_trainer:
-            upload_form = TrainerForm()
-            try:
-                user_type = Trainer.objects.get(user=user)
-            except Trainer.DoesNotExist:
-                messages.error(request, "Trainer info not found for update")
-                return redirect("FPT:manage-profile", user.id)
-        elif user.is_trainee:
-            upload_form = TraineeForm()
-            try:
-                user_type = Trainee.objects.get(user=user)
-            except Trainee.DoesNotExist:
-                messages.error(request, "Trainee info not found for update")
-                return redirect("FPT:manage-profile", user.id)
-        else:
-            upload_form = None
-            user_type = None
-        context = {
-            "user_info": user,
-            "upload_form": upload_form,
-            "user_type": user_type
-        }
-        return render(request, "registration/profile-update.html", context)
+            else:
+                upload_form = UserForm()
+                try:
+                    user_type = Trainee.objects.get(user=user)
+                except Trainee.DoesNotExist:
+                    messages.error(request, "Trainee info not found for update")
+                    return redirect("FPT:manage-profile", user.id)
+                context = {
+                    "user_info": user,
+                    "upload_form": upload_form,
+                    "user_type": user_type
+                }
+                return render(request, "registration/user_info.html", context)
+        messages.error(request, "User is not Trainee")
+        return redirect("FPT:manage-profile", user.id)
     messages.warning(request, "You don't have permission to action")
     return redirect("FPT:dashboard")
 
@@ -115,71 +145,92 @@ def reset_password(request, user_id):
         except User.DoesNotExist:
             messages.success(request, "Not found User in system")
             return redirect("FPT:account-manage")
-        if request.method == 'POST':
-            form = SetPasswordForm(user, request.POST)
-            if form.is_valid():
-                user_change = form.save()
-                update_session_auth_hash(request, user_change)  # Important!
-                messages.success(request, 'User password was successfully reset')
-                return redirect('FPT:manage-profile', user.id)
+        if user.is_trainee:
+            if request.method == 'POST':
+                form = SetPasswordForm(user, request.POST)
+                if form.is_valid():
+                    user_change = form.save()
+                    update_session_auth_hash(request, user_change)  # Important!
+                    messages.success(request, 'User password was successfully reset')
+                    return redirect('FPT:manage-profile', user.id)
+                else:
+                    messages.warning(request, 'Please correct the error below.')
+                    return redirect('FPT:manage-profile', user.id)
             else:
-                messages.warning(request, 'Please correct the error below.')
-                return redirect('FPT:manage-profile', user.id)
-        else:
-            form = SetPasswordForm(user)
-        return render(request, 'registration/change_password.html', {
-            'form': form,
-            'type': 'reset',
-            'user_info': user
-        })
+                form = SetPasswordForm(user)
+            return render(request, 'registration/change_password.html', {
+                'form': form,
+                'type': 'reset',
+                'user_info': user
+            })
+        messages.warning(request, "You don't have permission to reset password trainer")
+        return redirect("FPT:manage-profile", user.id)
     messages.warning(request, "You don't have permission to action")
     return redirect("FPT:dashboard")
 
 
-@require_http_methods(["POST"])
+@require_http_methods(["POST", "GET"])
 @login_required
 def change_profile_trainer(request, user_id):
-    if request.user.id == user_id or request.user.is_staff:
+    if request.user.is_staff:
         try:
             user = User.objects.get(pk=user_id)
-            trainer = Trainer.objects.get(pk=int(user_id))
+            trainer = Trainer.objects.get(pk=user.id)
         except User.DoesNotExist or Trainer.DoesNotExist:
             messages.success(request, "Not found Trainer in system")
-            return redirect("FPT:dashboard")
-        trainer_change = TrainerForm(request.POST, instance=trainer)
-        if trainer_change.is_valid():
-            trainer_change.save()
-            if request.user.is_staff:
-                messages.success(request, 'Trainer info was successfully update')
-                return redirect("FPT:manage-profile", user.id)
-            if user.is_trainer:
-                messages.success(request, 'Your Trainer info was successfully update')
-                return redirect("FPT:profile")
+            return redirect("FPT:manage-profile", user_id)
+
+        if user.is_trainer:
+            if request.method == "POST":
+                trainer_change = TrainerForm(request.POST, instance=trainer)
+                if trainer_change.is_valid():
+                    trainer_change.save()
+                    if request.user.is_staff:
+                        messages.success(request, 'Trainer info was successfully update')
+                        return redirect("FPT:manage-profile", user.id)
+
+            trainer_change = TrainerForm()
+            context = {
+                "user_info": user,
+                "upload_form": trainer_change,
+                "user_type": trainer
+            }
+            return render(request, "registration/trainer_info.html", context)
+        messages.warning(request, "User don't have permission to action")
+        return redirect("FPT:dashboard")
     messages.warning(request, "You don't have permission to action")
     return redirect("FPT:dashboard")
 
 
-@require_http_methods(["POST"])
+@require_http_methods(["POST", "GET"])
 @login_required
 def change_profile_trainee(request, user_id):
-    if request.user.id == user_id or request.user.is_staff:
+    if request.user.is_staff:
         try:
             user = User.objects.get(pk=user_id)
-            trainee = Trainee.objects.get(pk=int(user_id))
-        except User.DoesNotExist or Trainer.DoesNotExist:
+            trainee = Trainee.objects.get(pk=user.id)
+        except User.DoesNotExist or Trainee.DoesNotExist:
             messages.success(request, "Not found Trainer in system")
-            return redirect("FPT:dashboard")
-        trainee_change = TraineeForm(request.POST, instance=trainee)
-        if trainee_change.is_valid():
-            trainee_change.save()
-            if request.user.is_staff:
-                messages.success(request, 'Trainee info was successfully update')
-                return redirect("FPT:manage-profile", user.id)
-            if user.is_trainee:
-                messages.success(request, 'Your Trainee info was successfully update')
-                return redirect("FPT:profile")
-        messages.warning(request, "Please try again")
-        return redirect("FPT:manage-profile", user.id)
+            return redirect("FPT:manage-profile", user_id)
+
+        if user.is_trainee:
+            if request.method == "POST":
+                trainee_change = TraineeForm(request.POST, instance=trainee)
+                if trainee_change.is_valid():
+                    trainee_change.save()
+                    messages.success(request, 'Trainee info was successfully update')
+                    return redirect("FPT:manage-profile", user.id)
+                messages.error(request, "User don't have permission to action")
+                return redirect("FPT:manage-profile", user_id)
+            trainee_change = TraineeForm()
+            context = {
+                "user_info": user,
+                "upload_form": trainee_change,
+                "user_type": trainee
+            }
+            return render(request, "registration/trainee_info.html", context)
+        messages.warning(request, "User don't have permission to action")
+        return redirect("FPT:dashboard")
     messages.warning(request, "You don't have permission to action")
     return redirect("FPT:dashboard")
 
@@ -190,14 +241,18 @@ def remove_user(request, user_id):
     if request.user.is_staff:
         try:
             user = User.objects.get(pk=user_id)
-        except User.DoesNotExist or Trainer.DoesNotExist:
-            messages.success(request, "Not found Trainer in system")
+            trainee = Trainee.objects.get(user=user)
+        except User.DoesNotExist or Trainee.DoesNotExist:
+            messages.success(request, "Not found Trainee in system")
             return redirect("FPT:dashboard")
-        if request.method == "POST":
-            user.delete()
-            return HttpResponse(status=204)
-            # messages.success(request, "Delete course success")
-            # return redirect("FPT:account-manage")
+        if user.is_trainee:
+            if request.method == "POST":
+                user.delete()
+                return HttpResponse(status=204)
+                # messages.success(request, "Delete course success")
+                # return redirect("FPT:account-manage")
+        messages.warning(request, "You don't have permission to action")
+        return redirect("FPT:dashboard")
     messages.warning(request, "You don't have permission to action")
     return redirect("FPT:dashboard")
 
@@ -207,22 +262,43 @@ def remove_user(request, user_id):
 def search_users(request):
     if request.user.is_staff:
         if request.method == "POST":
-            users = User.objects.filter(
-                Q(full_name__icontains=request.POST["q"]) |
-                Q(username__icontains=request.POST["q"]) |
-                Q(email__icontains=request.POST["q"])
+            trainees = Trainee.objects.filter(
+                Q(user__full_name__icontains=request.POST["q"]) |
+                Q(phone__icontains=request.POST["q"]) |
+                Q(age__icontains=request.POST["q"]) |
+                Q(dot__icontains=request.POST["q"]) |
+                Q(education__icontains=request.POST["q"]) |
+                Q(location__icontains=request.POST["q"]) |
+                Q(experience__icontains=request.POST["q"])
             )
-            if users.count() > 0:
-                messages.success(request, f"Search users success with {users.count()} results")
+            if trainees.count() > 0:
+                messages.success(request, f"Search users success with {trainees.count()} results")
                 context = {
-                    "users_info": users
+                    "trainees": trainees
                 }
                 return render(request, "account_manage.html", context)
 
             messages.warning(request, f"Not found users {request.POST['q']}")
             context = {
-                "users_info": users
+                "trainees": trainees
             }
             return render(request, "account_manage.html", context)
+    messages.warning(request, "You don't have permission to action")
+    return redirect("FPT:dashboard")
+
+
+@require_http_methods(["GET"])
+@login_required
+def remove_trainer(request, user_id):
+    if request.user.is_staff:
+        try:
+            user = User.objects.get(pk=user_id)
+            trainer = Trainer.objects.get(user=user)
+        except User.DoesNotExist or Trainer.DoesNotExist:
+            messages.success(request, "Not found Trainee in system")
+            return redirect("FPT:dashboard")
+        trainer.delete()
+        messages.success(request, "Delete trainer info success")
+        return redirect("FPT:manage-profile", user.id)
     messages.warning(request, "You don't have permission to action")
     return redirect("FPT:dashboard")

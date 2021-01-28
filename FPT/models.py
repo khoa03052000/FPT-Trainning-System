@@ -13,9 +13,9 @@ TYPE_DEPARTMENT = [
 class User(AbstractUser):
     is_trainer = models.BooleanField(default=False)
     is_trainee = models.BooleanField(default=False)
-    department = models.CharField(default="FPT", max_length=20)
+    department = models.CharField(default="FPT", max_length=20, blank=True, null=True)
     avatar = models.ImageField(null=True, blank=True)
-    full_name = models.CharField(max_length=50, blank=True)
+    full_name = models.CharField(max_length=50, default="", blank=True)
     role = models.CharField(max_length=10, default="", blank=True)
 
     def save(self, *args, **kwargs):
@@ -24,36 +24,46 @@ class User(AbstractUser):
 
         if self.is_superuser and self.is_staff:
             self.role = "Admin"
+            self.department = "FPT Co."
         elif self.is_staff:
             self.role = "Staff"
+            self.department = "HR"
         elif self.is_trainer:
             self.role = "Trainer"
+            self.department = "FPT Education"
         elif self.is_trainee:
             self.role = "Trainee"
+            self.department = "FPT Education"
         return super().save(*args, **kwargs)
 
 
 class Trainer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    education = models.CharField(max_length=50, default="Greenwich", blank=True)
-    phone = models.CharField(max_length=12, default="09xx", blank=True)
-    working_place = models.CharField(max_length=50, default="FPT Co.", blank=True)
-    type = models.CharField(max_length=2, choices=TYPE_DEPARTMENT, default='ET')
+    education = models.CharField(max_length=50, default="", blank=True, null=True)
+    phone = models.CharField(max_length=12, default="", blank=True, null=True)
+    working_place = models.CharField(max_length=50, default="", blank=True, null=True)
+    type = models.CharField(max_length=2, choices=TYPE_DEPARTMENT, default='', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.user.username
 
 
 class Trainee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    phone = models.CharField(max_length=12, default="09xx", blank=True)
-    age = models.IntegerField(default=18, blank=True)
+    phone = models.CharField(max_length=12, default="", blank=True, null=True)
+    age = models.IntegerField(default=18, blank=True, null=True)
     dot = models.DateField(null=True, blank=True)
-    education = models.CharField(max_length=50, default="FPT Education", blank=True)
-    experience = models.IntegerField(default=1, blank=True)
-    location = models.CharField(max_length=50, default="Da Nang", blank=True)
-    toeic_score = models.IntegerField(default=5, blank=True)
+    education = models.CharField(max_length=50, default="",null=True, blank=True)
+    experience = models.IntegerField(default=1, null=True, blank=True)
+    location = models.CharField(max_length=50, default="", null=True, blank=True)
+    toeic_score = models.IntegerField(default=5, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.user.username
 
 
 class Category(models.Model):
@@ -89,6 +99,9 @@ class AssignUserToCourse(models.Model):
     assigned_user = GenericForeignKey("assigned_user_type", "assigned_user_id")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.assigned_user} in {self.course.name}"
 
     def save(self, *args, **kwargs):
         if self.assigned_user_id:

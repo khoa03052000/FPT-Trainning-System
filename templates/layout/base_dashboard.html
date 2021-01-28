@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
-
+    <meta name = "intercoolerjs: use-real-http-method" content = "true" />
     <title>{% block title %}Index{% endblock %}</title>
 
 
@@ -35,7 +35,10 @@
                     </li>
                     {% if user.is_superuser or user.is_staff %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'FPT:account-manage' %}"><i class="fas fa-user"></i><span>Account</span></a>
+                        <a class="nav-link" href="{% url 'FPT:account-manage' %}"><i class="fas fa-user"></i><span>Account Trainee</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'FPT:account-manage-trainer' %}"><i class="fas fa-user"></i><span>Account Trainer</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'FPT:courses' %}"><i class="fas fa-table"></i>Course</a>
@@ -183,17 +186,10 @@
                         </ul>
                     </div>
                 </nav>
-            {% include 'layout/message.html' %}
-            {% block content %}
-            {% endblock %}
+                    {% include 'layout/message.html' %}
+                    {% block content %}
+                    {% endblock %}
             </div>
-            <footer class="bg-white sticky-footer">
-                <div class="container my-auto">
-                    <div class="text-center my-auto copyright">
-                        <span>Develop by Khoa Huynh</span>
-                    </div>
-                </div>
-            </footer>
         </div>
         <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
