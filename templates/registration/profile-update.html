@@ -1,192 +1,4 @@
 <div class="row">
-
-    {% if user_info %}
-    <div class="col">
-        <div class="card shadow mb-3" id="user-form-update">
-            <div class="card-header py-3">
-                <p class="text-primary m-0 font-weight-bold">Staff: User Update</p>
-            </div>
-            <div class="card-body">
-                <form action="{% url 'FPT:change-profile-user' user_info.id %}" method="POST"
-                    enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="form-row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="username"><strong>Username</strong></label>
-                                <input class="form-control" type="text" name="username" value="{{ user_info.username }}"
-                                    disabled />
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="email"><strong>Email Address</strong></label><input class="form-control"
-                                    type="email" name="email" value="{{ user_info.email }}" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="first_name"><strong>First Name</strong></label><input class="form-control"
-                                    type="text" name="first_name" value="{{ user_info.first_name }}" />
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="last_name"><strong>Last Name</strong></label><input class="form-control"
-                                    type="text" name="last_name" value="{{ user_info.last_name }}" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="department"><strong>Department</strong></label><input class="form-control"
-                                    type="text" name="department" value="{{ user_info.department }}" />
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="avatar"><strong>Avatar</strong></label>
-                                <input type="file" name="avatar" accept="image/*" id="id_avatar">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <button class="btn btn-primary btn-sm" type="submit">
-                                Save
-                            </button>
-                            <button class="btn btn-danger submit-button" type="button" ic-action="remove"
-                                ic-target="#user-form-update">No Change</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        {% if user_info.is_trainer %}
-        <div class="card shadow mb-3" id="user-info">
-            <div class="card-header py-3">
-                <p class="text-primary m-0 font-weight-bold">Trainer Info</p>
-            </div>
-            <div class="card-body">
-                <form action="{% url 'FPT:change-profile-trainer' user_info.id %}" method="POST">
-                    {% csrf_token %}
-                    <div class="form-row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="education"><strong>Education</strong></label>
-                                <input class="form-control" type="text" name="education"
-                                    value="{{ user_type.education }}" />
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="phone"><strong>Phone</strong></label><input class="form-control" type="text"
-                                    name="phone" value="{{ user_type.phone }}" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="working-place"><strong>Working Place</strong></label><input
-                                    class="form-control" type="text" name="working-place"
-                                    value="{{ user_type.working_place }}" />
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="type"><strong>Type</strong></label>
-                                <select name="type" id="id_type">
-                                    <option value="ET" selected="">External Type</option>
-
-                                    <option value="IT">Internal Type</option>
-
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <button class="btn btn-primary btn-sm" type="submit">Save&nbsp;</button>
-                        <button class="btn btn-danger submit-button" type="button" ic-action="remove"
-                            ic-target="#user-info">No Change</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        {% elif user_info.is_trainee %}
-        <div class="card shadow mb-3" id="user-info">
-            <div class="card-header py-3">
-                <p class="text-primary m-0 font-weight-bold">Trainee Info</p>
-            </div>
-            <div class="card-body">
-                <form action="{% url 'FPT:change-profile-trainee' user_info.id %}" method="POST">
-                    {% csrf_token %}
-                    <div class="form-row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="education"><strong>Education</strong></label>
-                                <input class="form-control" type="text" name="education"
-                                    value="{{ user_type.education }}" />
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="phone"><strong>Phone</strong></label><input class="form-control" type="text"
-                                    name="phone" value="{{ user_type.phone }}" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="age"><strong>Age</strong></label><input class="form-control" type="text"
-                                    name="age" value="{{ user_type.age }}" />
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="dot"><strong>Date of Birth</strong></label><input class="form-control"
-                                    type="date" name="dot" value="{{ user_type.dot }}" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="experience"><strong>Experience</strong></label>
-                                <input class="form-control" type="text" name="experience"
-                                    value="{{ user_type.experience }}" />
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="toeic_score"><strong>Toeic</strong></label><input class="form-control"
-                                    type="text" name="toeic_score" value="{{ user_type.toeic_score }}" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="location"><strong>Location</strong></label><input class="form-control"
-                                    type="text" name="location" value="{{ user_type.location }}" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <button class="btn btn-primary btn-sm" type="submit">Save&nbsp;</button>
-                        <button class="btn btn-danger submit-button" type="button" ic-action="remove"
-                            ic-target="#user-info">No Change</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        {% endif %}
-    </div>
-    {% elif user %}
     <div class="col">
         <div class="card shadow mb-3" id="user-form-update">
             <div class="card-header py-3">
@@ -206,7 +18,7 @@
                         <div class="col">
                             <div class="form-group">
                                 <label for="email"><strong>Email Address</strong></label><input class="form-control"
-                                    type="email" name="email" value="{{ user.email }}" />
+                                    type="email" name="email" value="{{ user.email }}" disabled />
                             </div>
                         </div>
                     </div>
@@ -253,10 +65,10 @@
         {% if user.is_trainer %}
         <div class="card shadow" id="user-info">
             <div class="card-header py-3">
-                <p class="text-primary m-0 font-weight-bold">{{ user }} Update</p>
+                <p class="text-primary m-0 font-weight-bold">Trainer Update</p>
             </div>
             <div class="card-body">
-                <form action="{% url 'FPT:change-profile-trainer' user.id %}" method="POST">
+                <form action="{% url 'FPT:update-profile-trainer'%}" method="POST">
                     {% csrf_token %}
                     <div class="form-row">
                         <div class="col">
@@ -277,7 +89,7 @@
                         <div class="col">
                             <div class="form-group">
                                 <label for="working-place"><strong>Working Place</strong></label><input
-                                    class="form-control" type="text" name="working-place"
+                                    class="form-control" type="text" name="working_place"
                                     value="{{ user_type.working_place }}" />
                             </div>
                         </div>
@@ -305,7 +117,7 @@
                 <p class="text-primary m-0 font-weight-bold">Trainee Info</p>
             </div>
             <div class="card-body">
-                <form action="{% url 'FPT:change-profile-trainee' user.id %}" method="POST">
+                <form action="{% url 'FPT:update-profile-trainee'%}" method="POST">
                     {% csrf_token %}
                     <div class="form-row">
                         <div class="col">
@@ -369,5 +181,4 @@
         </div>
         {% endif %}
     </div>
-    {% endif %}
 </div>

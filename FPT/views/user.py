@@ -90,3 +90,41 @@ def change_password(request):
         return render(request, 'registration/change_password.html', {
             'form': form
         })
+
+
+@require_http_methods(["POST"])
+@login_required
+def update_profile_trainee(request):
+    try:
+        user = User.objects.get(pk=request.user.id)
+        trainee = Trainee.objects.get(pk=user.id)
+    except User.DoesNotExist or Trainee.DoesNotExist:
+        messages.success(request, "Not found Trainee in system")
+        return redirect("FPT:dashboard")
+    trainee_change = TraineeForm(request.POST, instance=trainee)
+    if trainee_change.is_valid():
+        trainee_change.save()
+        messages.success(request, 'Your Trainee info was successfully update')
+        return redirect("FPT:profile")
+    else:
+        messages.warning(request, "You don't have permission to action")
+        return redirect("FPT:profile")
+
+
+@require_http_methods(["POST"])
+@login_required
+def update_profile_trainer(request):
+    try:
+        user = User.objects.get(pk=request.user.id)
+        trainer = Trainer.objects.get(pk=user.id)
+    except User.DoesNotExist or Trainee.DoesNotExist:
+        messages.success(request, "Not found Trainer in system")
+        return redirect("FPT:dashboard")
+    trainer_change = TrainerForm(request.POST, instance=trainer)
+    if trainer_change.is_valid():
+        trainer_change.save()
+        messages.success(request, 'Your Trainer info was successfully update')
+        return redirect("FPT:profile")
+    else:
+        messages.warning(request, "You don't have permission to action")
+        return redirect("FPT:profile")
