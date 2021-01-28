@@ -90,6 +90,17 @@ class AssignUserToCourse(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def save(self, *args, **kwargs):
+        if self.assigned_user_id:
+            if self.assigned_user_type.id == 7:
+                trainer = Trainer.objects.filter(pk=self.assigned_user_id)
+                if trainer.exists():
+                    return super().save(*args, **kwargs)
+            elif self.assigned_user_type.id == 8:
+                trainee = Trainee.objects.filter(pk=self.assigned_user_id)
+                if trainee.exists():
+                    return super().save(*args, **kwargs)
+
 
 class Request(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_request")

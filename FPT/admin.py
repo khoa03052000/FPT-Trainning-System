@@ -3,12 +3,7 @@ from django.contrib.auth import admin as auth_admin
 
 from .models import *
 # Register your models here.
-admin.site.register(Trainee)
 admin.site.register(Trainer)
-admin.site.register(Course)
-admin.site.register(Category)
-admin.site.register(Request)
-admin.site.register(AssignUserToCourse)
 
 
 @admin.register(User)

@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import SetPasswordForm, UserCreationForm
+from django.contrib.auth.forms import SetPasswordForm
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -71,7 +71,7 @@ def change_profile_user(request, user_id):
         try:
             user = User.objects.get(pk=user_id)
         except User.DoesNotExist:
-            messages.success(request, "Not found User in system")
+            messages.error(request, "Not found User in system")
             return redirect("FPT:account-manage")
         if request.method == 'POST':
             user_change = UserForm(request.POST, request.FILES, instance=user)
@@ -81,13 +81,25 @@ def change_profile_user(request, user_id):
                 return redirect("FPT:manage-profile", user.id)
         if user.is_trainer:
             upload_form = TrainerForm()
+            try:
+                user_type = Trainer.objects.get(user=user)
+            except Trainer.DoesNotExist:
+                messages.error(request, "Trainer info not found for update")
+                return redirect("FPT:manage-profile", user.id)
         elif user.is_trainee:
             upload_form = TraineeForm()
+            try:
+                user_type = Trainee.objects.get(user=user)
+            except Trainee.DoesNotExist:
+                messages.error(request, "Trainee info not found for update")
+                return redirect("FPT:manage-profile", user.id)
         else:
             upload_form = None
+            user_type = None
         context = {
             "user_info": user,
-            "upload_form": upload_form
+            "upload_form": upload_form,
+            "user_type": user_type
         }
         return render(request, "registration/profile-update.html", context)
     messages.warning(request, "You don't have permission to action")

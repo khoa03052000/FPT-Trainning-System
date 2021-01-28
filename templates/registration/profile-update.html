@@ -1,13 +1,14 @@
 <div class="row">
 
-{% if user_info %}
+    {% if user_info %}
     <div class="col">
         <div class="card shadow mb-3" id="user-form-update">
             <div class="card-header py-3">
                 <p class="text-primary m-0 font-weight-bold">Staff: User Update</p>
             </div>
             <div class="card-body">
-                <form action="{% url 'FPT:change-profile-user' user_info.id %}" method="POST" enctype="multipart/form-data">
+                <form action="{% url 'FPT:change-profile-user' user_info.id %}" method="POST"
+                    enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-row">
                         <div class="col">
@@ -65,19 +66,48 @@
             </div>
         </div>
         {% if user_info.is_trainer %}
-        <div class="card shadow" id="user-info">
+        <div class="card shadow mb-3" id="user-info">
             <div class="card-header py-3">
-                <p class="text-primary m-0 font-weight-bold">Staff: {{ user_info.role }} Update</p>
+                <p class="text-primary m-0 font-weight-bold">Trainer Info</p>
             </div>
             <div class="card-body">
                 <form action="{% url 'FPT:change-profile-trainer' user_info.id %}" method="POST">
                     {% csrf_token %}
-                    {% for field in upload_form %}
-                    <div class="form-group">
-                        <label for="{{ field.label.name }}"><strong>{{ field.label}}</strong></label>
-                        {{field}}
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="education"><strong>Education</strong></label>
+                                <input class="form-control" type="text" name="education"
+                                    value="{{ user_type.education }}" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="phone"><strong>Phone</strong></label><input class="form-control" type="text"
+                                    name="phone" value="{{ user_type.phone }}" />
+                            </div>
+                        </div>
                     </div>
-                    {% endfor %}
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="working-place"><strong>Working Place</strong></label><input
+                                    class="form-control" type="text" name="working-place"
+                                    value="{{ user_type.working_place }}" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="type"><strong>Type</strong></label>
+                                <select name="type" id="id_type">
+                                    <option value="ET" selected="">External Type</option>
+
+                                    <option value="IT">Internal Type</option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <button class="btn btn-primary btn-sm" type="submit">Save&nbsp;</button>
                         <button class="btn btn-danger submit-button" type="button" ic-action="remove"
@@ -87,19 +117,65 @@
             </div>
         </div>
         {% elif user_info.is_trainee %}
-        <div class="card shadow" id="user-info">
+        <div class="card shadow mb-3" id="user-info">
             <div class="card-header py-3">
-                <p class="text-primary m-0 font-weight-bold">{{ user_info.role }} Update</p>
+                <p class="text-primary m-0 font-weight-bold">Trainee Info</p>
             </div>
             <div class="card-body">
                 <form action="{% url 'FPT:change-profile-trainee' user_info.id %}" method="POST">
                     {% csrf_token %}
-                    {% for field in upload_form %}
-                    <div class="form-group">
-                        <label for="{{ field.label.name }}"><strong>{{ field.label}}</strong></label>
-                        {{field}}
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="education"><strong>Education</strong></label>
+                                <input class="form-control" type="text" name="education"
+                                    value="{{ user_type.education }}" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="phone"><strong>Phone</strong></label><input class="form-control" type="text"
+                                    name="phone" value="{{ user_type.phone }}" />
+                            </div>
+                        </div>
                     </div>
-                    {% endfor %}
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="age"><strong>Age</strong></label><input class="form-control" type="text"
+                                    name="age" value="{{ user_type.age }}" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="dot"><strong>Date of Birth</strong></label><input class="form-control"
+                                    type="date" name="dot" value="{{ user_type.dot }}" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="experience"><strong>Experience</strong></label>
+                                <input class="form-control" type="text" name="experience"
+                                    value="{{ user_type.experience }}" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="toeic_score"><strong>Toeic</strong></label><input class="form-control"
+                                    type="text" name="toeic_score" value="{{ user_type.toeic_score }}" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="location"><strong>Location</strong></label><input class="form-control"
+                                    type="text" name="location" value="{{ user_type.location }}" />
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <button class="btn btn-primary btn-sm" type="submit">Save&nbsp;</button>
                         <button class="btn btn-danger submit-button" type="button" ic-action="remove"
@@ -110,7 +186,7 @@
         </div>
         {% endif %}
     </div>
-{% elif user %}
+    {% elif user %}
     <div class="col">
         <div class="card shadow mb-3" id="user-form-update">
             <div class="card-header py-3">
@@ -182,12 +258,39 @@
             <div class="card-body">
                 <form action="{% url 'FPT:change-profile-trainer' user.id %}" method="POST">
                     {% csrf_token %}
-                    {% for field in upload_form %}
-                    <div class="form-group">
-                        <label for="{{ field.label.name }}"><strong>{{ field.label}}</strong></label>
-                        {{field}}
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="education"><strong>Education</strong></label>
+                                <input class="form-control" type="text" name="education"
+                                    value="{{ user_type.education }}" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="phone"><strong>Phone</strong></label><input class="form-control" type="text"
+                                    name="phone" value="{{ user_type.phone }}" />
+                            </div>
+                        </div>
                     </div>
-                    {% endfor %}
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="working-place"><strong>Working Place</strong></label><input
+                                    class="form-control" type="text" name="working-place"
+                                    value="{{ user_type.working_place }}" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="type"><strong>Type</strong></label>
+                                <select name="type" id="id_type">
+                                    <option value="ET" selected="">External Type</option>
+                                    <option value="IT">Internal Type</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <button class="btn btn-primary btn-sm" type="submit">Save&nbsp;</button>
                         <button class="btn btn-danger submit-button" type="button" ic-action="remove"
@@ -197,19 +300,65 @@
             </div>
         </div>
         {% elif user.is_trainee %}
-        <div class="card shadow" id="user-info">
+        <div class="card shadow mb-3" id="user-info">
             <div class="card-header py-3">
-                <p class="text-primary m-0 font-weight-bold">{{ user }} Update</p>
+                <p class="text-primary m-0 font-weight-bold">Trainee Info</p>
             </div>
             <div class="card-body">
                 <form action="{% url 'FPT:change-profile-trainee' user.id %}" method="POST">
                     {% csrf_token %}
-                    {% for field in upload_form %}
-                    <div class="form-group">
-                        <label for="{{ field.label.name }}"><strong>{{ field.label}}</strong></label>
-                        {{field}}
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="education"><strong>Education</strong></label>
+                                <input class="form-control" type="text" name="education"
+                                    value="{{ user_type.education }}" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="phone"><strong>Phone</strong></label><input class="form-control" type="text"
+                                    name="phone" value="{{ user_type.phone }}" />
+                            </div>
+                        </div>
                     </div>
-                    {% endfor %}
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="age"><strong>Age</strong></label><input class="form-control" type="text"
+                                    name="age" value="{{ user_type.age }}" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="dot"><strong>Date of Birth</strong></label><input class="form-control"
+                                    type="date" name="dot" value="{{ user_type.dot }}" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="experience"><strong>Experience</strong></label>
+                                <input class="form-control" type="text" name="experience"
+                                    value="{{ user_type.experience }}" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="toeic_score"><strong>Toeic</strong></label><input class="form-control"
+                                    type="text" name="toeic_score" value="{{ user_type.toeic_score }}" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="location"><strong>Location</strong></label><input class="form-control"
+                                    type="text" name="location" value="{{ user_type.location }}" />
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <button class="btn btn-primary btn-sm" type="submit">Save&nbsp;</button>
                         <button class="btn btn-danger submit-button" type="button" ic-action="remove"
@@ -220,5 +369,5 @@
         </div>
         {% endif %}
     </div>
-{% endif %}
+    {% endif %}
 </div>
