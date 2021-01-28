@@ -31,12 +31,9 @@ def create_course(request):
     if request.user.is_staff:
         upload = CourseCreate()
         if request.method == 'POST':
-            try:
-                check_course = Course.objects.get(name=request.POST["name"])
-            except Course.DoesNotExist:
-                check_course = None
 
-            if check_course:
+            check_course = Course.objects.filter(name=request.POST["name"])
+            if check_course.exists():
                 messages.warning(request, f"The course with name {check_course.name} is exist")
                 return redirect('FPT:create-course')
 
@@ -67,8 +64,12 @@ def course_detail(request, course_id):
 
         assign_user = AssignUserToCourse.objects.filter(course__id=course_id)
 
-        trainer_type = ContentType.objects.get_for_model(Trainer)
-        trainee_type = ContentType.objects.get_for_model(Trainee)
+        try:
+            trainer_type = ContentType.objects.get_for_model(Trainer)
+            trainee_type = ContentType.objects.get_for_model(Trainee)
+        except ContentType.DoesNotExist:
+            messages.error(request, "Not found Trainer and Trainee")
+            return redirect("FPT:courses")
 
         trainers = [
             u.assigned_user
@@ -115,11 +116,9 @@ def update_course(request, course_id):
             }
             return render(request, 'course_update.html', context)
         if request.method == 'POST':
-            try:
-                check_course = Course.objects.get(name=request.POST["name"])
-            except Course.DoesNotExist:
-                check_course = None
-            if check_course:
+
+            check_course = Course.objects.filter(name=request.POST["name"])
+            if check_course.exists():
                 messages.warning(request, f"The course with name {check_course.name} is exist")
                 return redirect("FPT:course-detail", course_id=course_self.id)
             course_form = CourseCreate(request.POST, request.FILES, instance=course_self)

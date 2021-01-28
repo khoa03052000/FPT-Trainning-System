@@ -1,20 +1,22 @@
-<div class="card shadow mb-4" id="form-course-update" >
-    <div class="card-header d-flex justify-content-between align-items-center" >
+<div class="card shadow mb-4" id="form-course-update">
+    <div class="card-header d-flex justify-content-between align-items-center">
 
-<form class="custom-form" action="{% url 'FPT:update-course' course.id %}" method="post"  enctype="multipart/form-data">
+        <form class="custom-form" action="{% url 'FPT:update-course' course.id %}" method="post"
+            enctype="multipart/form-data">
             {% csrf_token %}
             <h6 class="text-primary font-weight-bold m-2">Course Update</h6>
             {% for field in upload_form %}
-                <div class="form-row form-group">
-                    <div class="col-sm-4 label-column">
-                       <label for="{{ field.label.name }}"><strong>{{ field.label}}</strong></label>
-                        {{field}}
-                    </div>
+            <div class="form-row form-group">
+                <div class="col-sm-4 label-column">
+                    <label for="{{ field.label.name }}"><strong>{{ field.label}}</strong></label>
+                    {{field}}
                 </div>
+            </div>
             {% endfor %}
-        <br>
+            <br>
             <button class="btn btn-primary submit-button" type="submit">Save</button>
-        <button class="btn btn-danger submit-button" type="submit" ic-action="remove" ic-target="#form-course-update">Back</button>
+            <button class="btn btn-danger submit-button" type="submit" ic-action="remove"
+                ic-target="#form-course-update">Back</button>
         </form>
     </div>
 </div>
