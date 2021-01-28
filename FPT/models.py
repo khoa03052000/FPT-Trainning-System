@@ -35,9 +35,9 @@ class User(AbstractUser):
 
 class Trainer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    education = models.CharField(max_length=50, default="", blank=True)
-    phone = models.CharField(max_length=12, default="", blank=True)
-    working_place = models.CharField(max_length=50, default="", blank=True)
+    education = models.CharField(max_length=50, default="Greenwich", blank=True)
+    phone = models.CharField(max_length=12, default="09xx", blank=True)
+    working_place = models.CharField(max_length=50, default="FPT Co.", blank=True)
     type = models.CharField(max_length=2, choices=TYPE_DEPARTMENT, default='ET')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -47,7 +47,7 @@ class Trainee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     phone = models.CharField(max_length=12, default="09xx", blank=True)
     age = models.IntegerField(default=18, blank=True)
-    dot = models.DateField(default="2000-05-03", blank=True)
+    dot = models.DateField(null=True, blank=True)
     education = models.CharField(max_length=50, default="FPT Education", blank=True)
     experience = models.IntegerField(default=1, blank=True)
     location = models.CharField(max_length=50, default="Da Nang", blank=True)
