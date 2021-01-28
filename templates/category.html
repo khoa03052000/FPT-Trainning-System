@@ -5,7 +5,8 @@
             <h3 class="text-dark mb-4">Category Manage</h3>
         </div>
         <div class="col-12 col-sm-6 col-md-6 text-right" style="margin-bottom: 30px;">
-            <a class="btn btn-primary" href="{% url 'FPT:create-category' %}" role="button"><i class="fa fa-plus"></i>&nbsp;Add Category</a>
+            <a class="btn btn-primary" href="{% url 'FPT:create-category' %}" role="button"><i
+                    class="fa fa-plus"></i>&nbsp;Add Category</a>
         </div>
     </div>
     <div class="card" id="TableSorterCard">
@@ -15,19 +16,19 @@
                     <p class="text-primary m-0 font-weight-bold">List Category</p>
                 </div>
                 <div class="col-12 col-sm-7 col-md-6 text-right" style="margin: 0px;padding: 5px 15px;">
-                  <form action="{% url 'FPT:search-categories' %}" method="POST"
-                    class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                    {% csrf_token %}
-                      <div class="input-group">
-                        <input class="bg-light form-control border-0 small" type="text"
-                            placeholder="Search for ..." name="q" />
-                        <div class="input-group-append">
-                            <button class="btn btn-primary py-0" type="submit">
-                                <i class="fas fa-search"></i>
-                            </button>
+                    <form action="{% url 'FPT:search-categories' %}" method="POST"
+                        class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input class="bg-light form-control border-0 small" type="text" placeholder="Search for ..."
+                                name="q" />
+                            <div class="input-group-append">
+                                <button class="btn btn-primary py-0" type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
                 </div>
             </div>
         </div>
@@ -48,15 +49,16 @@
                                 <td>{{ category.name }}</td>
                                 <td>{{ category.description }}</td>
                                 <td class="text-center">
-                                    <a href="{% url 'FPT:category-detail' category.id %}" class="btn btn-success" role="button"
-                                        style="background: rgb(11,171,56);margin: 2px;"><i
+                                    <a href="{% url 'FPT:category-detail' category.id %}" class="btn btn-success"
+                                        role="button" style="background: rgb(11,171,56);margin: 2px;"><i
                                             class="fas fa-pencil-alt"></i>
                                     </a>
-                                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" id="token-category">
-                                    <a class="btn btn-danger" role="button" style="margin: 2px;"  ic-action="remove" ic-target="#category-{{ category.id }}" ic-include="#token-category" ic-delete-from="{% url 'FPT:delete-category' category.id %}"  >
-                                        <i
-
-                                            class="fas fa-trash"></i>
+                                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"
+                                        id="token-category">
+                                    <a class="btn btn-danger" role="button" style="margin: 2px;" ic-action="remove"
+                                        ic-target="#category-{{ category.id }}" ic-include="#token-category"
+                                        ic-delete-from="{% url 'FPT:delete-category' category.id %}">
+                                        <i class="fas fa-trash"></i>
 
                                     </a>
                                 </td>

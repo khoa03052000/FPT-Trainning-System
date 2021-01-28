@@ -1,22 +1,24 @@
-
-<div class="card shadow mb-4" id="category-form-update" >
-    <div class="card-header d-flex justify-content-between align-items-center" >  <form class="form" action="{% url 'FPT:update-category' category.id %}" method="POST">
-    <div class="form-group">
-        <h6 class="text-primary font-weight-bold m-2">Update Category</h6>
-        {% csrf_token %}
-        {% for field in upload_form %}
-            <div class="form-row form-group">
-                <div class="col-sm-4 label-column">
-                    <label class="col-form-label" for="name-input-field">{{field.label}} </label>
+<div class="card shadow mb-4" id="category-form-update">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <form class="form" action="{% url 'FPT:update-category' category.id %}" method="POST">
+            <div class="form-group">
+                <h6 class="text-primary font-weight-bold m-2">Update Category</h6>
+                {% csrf_token %}
+                {% for field in upload_form %}
+                <div class="form-row form-group">
+                    <div class="col-sm-4 label-column">
+                        <label class="col-form-label" for="name-input-field">{{field.label}} </label>
+                    </div>
+                    <div class="col-sm-6 input-column">
+                        {{ field }}
+                    </div>
                 </div>
-                <div class="col-sm-6 input-column">
-                    {{ field }}
-                </div>
+                {% endfor %}
+                <br>
+                <button class="btn btn-primary submit-button" type="submit">Save</button>
+                <button class="btn btn-danger submit-button" type="submit" ic-action="remove"
+                    ic-target="#category-form-update">Back</button>
             </div>
-        {% endfor %}
-    <br>
-        <button class="btn btn-primary submit-button" type="submit">Save</button>
-     <button class="btn btn-danger submit-button" type="submit" ic-action="remove" ic-target="#category-form-update">Back</button>
+        </form>
     </div>
-</form>  </div>
 </div>
