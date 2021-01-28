@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
 
 from FPT.models import Course, Trainer, Trainee, Request, AssignUserToCourse
@@ -9,8 +9,7 @@ User = get_user_model()
 
 
 def index(request):
-    courses = Course.objects.all()
-    return render(request, 'home.html', {'courses': courses})
+    return redirect('login')
 
 
 @require_http_methods(["GET"])

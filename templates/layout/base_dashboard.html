@@ -5,9 +5,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
-    {% block title %}
-        <title>Index</title>
-    {% endblock %}
+
+    <title>{% block title %}Index{% endblock %}</title>
+
 
     {% block css %}
     {% endblock %}
@@ -25,9 +25,6 @@
         <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
             <div class="container-fluid d-flex flex-column p-0">
                 <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
-                    <div class="sidebar-brand-icon rotate-n-15">
-                        <img src="{% static 'img/avatars/logo-cirrcle.png' %}">
-                    </div>
                     <div class="sidebar-brand-text mx-3"><span>FPT Training <br> System</span></div>
                 </a>
                 <hr class="sidebar-divider my-0" />
@@ -49,11 +46,17 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'FPT:categories' %}"><i class="fa fa-tags"></i><span>Categories</span></a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'FPT:register-users' %}"><i
+                                class="fas fa-user-circle"></i><span>Register User</span></a>
+                    </li>
                     {% endif %}
+                    {% if user.is_trainer %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'FPT:register' %}"><i
-                                class="fas fa-user-circle"></i><span>View Course</span></a>
+                                class="fas fa-user-circle"></i><span>View Course Assigned</span></a>
                     </li>
+                    {% endif %}
                     {% if user.is_trainee %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'FPT:register' %}"><i
@@ -76,18 +79,6 @@
                             type="button">
                             <i class="fas fa-bars"></i>
                         </button>
-                        <form
-                            class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                            <div class="input-group">
-                                <input class="bg-light form-control border-0 small" type="text"
-                                    placeholder="Search for ..." />
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary py-0" type="button">
-                                        <i class="fas fa-search"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
                         <ul class="nav navbar-nav flex-nowrap ml-auto">
                             <li class="nav-item dropdown d-sm-none no-arrow">
                                 <a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false"
@@ -225,12 +216,7 @@
     <script src="{% static 'js/chart.min.js' %}"></script>
     <script src="{% static 'js/bs-init.js' %}"></script>
     <script src="{% static 'js/intercool.js' %}"></script>
-{#    <script src="{% static 'js/Table-with-search--sort-filters.js' %}"></script>#}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
-{#    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.2/js/jquery.tablesorter.js"></script>#}
-{#    <script#}
-{#        src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.2/js/widgets/widget-filter.min.js"></script>#}
-{#    <script#}
 <script    src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.2/js/widgets/widget-storage.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
