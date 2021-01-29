@@ -86,6 +86,17 @@ DATABASES = {
     }
 }
 
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "mailer-0104.inet.vn"
+EMAIL_PORT = 465
+EMAIL_HOST_USER = "noreply@cloudfly.vn"
+EMAIL_HOST_PASSWORD = "CFCloud123!!"
+DEFAULT_FROM_EMAIL = "noreply@cloudfly.vn"
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+# https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
+EMAIL_TIMEOUT = None
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators

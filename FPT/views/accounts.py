@@ -177,7 +177,7 @@ def change_profile_trainer(request, user_id):
             user = User.objects.get(pk=user_id)
             trainer = Trainer.objects.get(pk=user.id)
         except User.DoesNotExist or Trainer.DoesNotExist:
-            messages.success(request, "Not found Trainer in system")
+            messages.error(request, "Not found Trainer in system")
             return redirect("FPT:manage-profile", user_id)
 
         if user.is_trainer:
@@ -185,10 +185,10 @@ def change_profile_trainer(request, user_id):
                 trainer_change = TrainerForm(request.POST, instance=trainer)
                 if trainer_change.is_valid():
                     trainer_change.save()
-                    if request.user.is_staff:
-                        messages.success(request, 'Trainer info was successfully update')
-                        return redirect("FPT:manage-profile", user.id)
-
+                    messages.success(request, 'Trainer info was successfully update')
+                    return redirect("FPT:manage-profile", user.id)
+                messages.warning(request, "Please try again, error form")
+                return redirect("FPT:manage-profile", user_id)
             trainer_change = TrainerForm()
             context = {
                 "user_info": user,
@@ -197,7 +197,7 @@ def change_profile_trainer(request, user_id):
             }
             return render(request, "registration/trainer_info.html", context)
         messages.warning(request, "User don't have permission to action")
-        return redirect("FPT:dashboard")
+        return redirect("FPT:manage-profile", user_id)
     messages.warning(request, "You don't have permission to action")
     return redirect("FPT:dashboard")
 
@@ -210,7 +210,7 @@ def change_profile_trainee(request, user_id):
             user = User.objects.get(pk=user_id)
             trainee = Trainee.objects.get(pk=user.id)
         except User.DoesNotExist or Trainee.DoesNotExist:
-            messages.success(request, "Not found Trainer in system")
+            messages.error(request, "Not found Trainer in system")
             return redirect("FPT:manage-profile", user_id)
 
         if user.is_trainee:
@@ -220,7 +220,7 @@ def change_profile_trainee(request, user_id):
                     trainee_change.save()
                     messages.success(request, 'Trainee info was successfully update')
                     return redirect("FPT:manage-profile", user.id)
-                messages.error(request, "User don't have permission to action")
+                messages.warning(request, "Please try again, error form")
                 return redirect("FPT:manage-profile", user_id)
             trainee_change = TraineeForm()
             context = {

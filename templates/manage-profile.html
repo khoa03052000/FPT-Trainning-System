@@ -116,7 +116,7 @@ Profile: {{ user_info.username }}
                                         </div>
                                     </div>
                                 </div>
-                            {% if user__info.is_trainer is False %}
+                            {% if user_info.is_trainee %}
                             <div class="form-row" style="justify-content:space-between">
                                 <div class="form-group">
                                     <a ic-get-from="{% url 'FPT:change-profile-user' user_info.id %}"
@@ -188,6 +188,7 @@ Profile: {{ user_info.username }}
                             </div>
                         </div>
                         <div class="form-row" style="justify-content:space-between">
+                            {% if user_type %}
                             <div class="form-group">
                                 <a ic-get-from="{% url 'FPT:change-profile-trainer' user_info.id %}"
                                     ic-target="#user-update" ic-replace-target="false">
@@ -196,6 +197,7 @@ Profile: {{ user_info.username }}
                                     </button>
                                 </a>
                             </div>
+                            {% endif %}
                             <div class="form-group">
                                 <a href="{% url 'FPT:remove-trainer' user_info.id %}">
                                     <button class="btn btn-dark btn-sm" type="button">
@@ -218,6 +220,7 @@ Profile: {{ user_info.username }}
                                         Add Trainer Info
                                     </button>
                             </a>
+                            {% if user_type %}
                             <div class="form-group">
                                 <a ic-get-from="{% url 'FPT:change-profile-trainer' user_info.id %}"
                                     ic-target="#user-update" ic-replace-target="false">
@@ -226,8 +229,8 @@ Profile: {{ user_info.username }}
                                     </button>
                                 </a>
                             </div>
+                            {% endif %}
                         </div>
-
                     </div>
                 </div>
                 {% endif %}

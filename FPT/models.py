@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.contrib.auth.models import AbstractUser
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -31,6 +33,9 @@ class User(AbstractUser):
         elif self.is_trainer:
             self.role = "Trainer"
             self.department = "FPT Education"
+            trainer = Trainer.objects.filter(user=self)
+            if trainer.exists() is False:
+                Trainer.objects.create(user=self)
         elif self.is_trainee:
             self.role = "Trainee"
             self.department = "FPT Education"
@@ -133,8 +138,28 @@ class Request(models.Model):
         choices=STATUS_CHOICES,
         default=PENDING,
     )
+    is_permission = models.BooleanField(default=False, null=False)
+    limit_time = models.DateTimeField(blank=True, null=True)
     email = models.EmailField(default="khoa@gmail.com")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    content = models.TextField(default="", blank=True)
 
+    def __str__(self):
+        return f"Request from {self.user.username} to {self.course.name}"
+
+    def save(self, *args, **kwargs):
+        if self.status == 'APPROVED':
+            self.is_permission = True
+            if self.updated_at is not None:
+                self.limit_time = self.updated_at + timedelta(days=7)
+                return super().save(*args, **kwargs)
+        elif self.status == 'REJECTED':
+            self.limit_time = None
+            self.is_permission = False
+            return super().save(*args, **kwargs)
+        elif self.status == 'CANCELLED':
+            self.delete()
+        else:
+            return super().save(*args, **kwargs)
 

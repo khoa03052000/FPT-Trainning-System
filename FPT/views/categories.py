@@ -30,7 +30,7 @@ def create_category(request):
         if request.method == 'POST':
             check_category = Category.objects.filter(name=request.POST["name"])
             if check_category.exists():
-                messages.warning(request, f"The category with name {check_category.name} is exist")
+                messages.warning(request, f"The category with name {request.POST['name']} is exist")
                 return redirect("FPT:create-category")
             upload = CategoryCreate(request.POST)
             if upload.is_valid():
@@ -85,7 +85,7 @@ def update_category(request, category_id):
 
             check_category = Category.objects.filter(name=request.POST["name"])
             if check_category.exists():
-                messages.warning(request, f"The category with name {check_category.name} is exist")
+                messages.warning(request, f"The category with name {request.POST['name']} is exist")
                 return redirect("FPT:category-detail", category_id=category_self.id)
             category_form = CategoryCreate(request.POST, instance=category_self)
             if category_form.is_valid():

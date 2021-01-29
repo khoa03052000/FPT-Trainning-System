@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -15,9 +16,12 @@ def index(request):
 @require_http_methods(["GET"])
 @login_required
 def get_dashboard(request):
-    user = request.user
+    try:
+        user = User.objects.get(id=request.user.id)
+    except User.DoesNotExist:
+        messages.error(request, "User will be blocked by Admin")
+        return redirect('login')
     user_courses = AssignUserToCourse.objects.filter(assigned_user_id=user.id)
-    courses = Course.objects.filter(pk__in=[i.course_id for i in user_courses]).count()
     if user.is_staff or user.is_superuser:
         trainers = Trainer.objects.all().count()
         trainees = Trainee.objects.all().count()
@@ -33,8 +37,22 @@ def get_dashboard(request):
             "courses": courses
         }
         return render(request, 'index.html', context=context)
-    context = {
-        "user": user,
-        "courses": courses
-    }
-    return render(request, 'index.html', context)
+    if user.is_trainee:
+        courses = Course.objects.filter(pk__in=[i.course_id for i in user_courses])
+        requests = Request.objects.filter(user=user)
+        courses_available = Course.objects.exclude(pk__in=[i.course_id for i in user_courses]).exclude(is_visible=False)
+        context = {
+            "user": user,
+            "courses": courses,
+            'requests': requests,
+            'courses_available': courses_available
+        }
+        return render(request, 'index.html', context)
+    if user.is_trainer:
+        context = {
+            "user": user,
+        }
+        return render(request, 'index.html', context)
+    messages.error(request, "You have no role in system")
+    return redirect('login')
+

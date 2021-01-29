@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 
-from FPT.models import Course, Category, Trainer, Trainee
+from FPT.models import Course, Category, Trainer, Trainee, Request
 
 User = get_user_model()
 
@@ -75,3 +75,4 @@ class UserFPTCreationForm(UserCreationForm):
         user_info.save()
         user.save()
         return user, user_info
+

@@ -86,7 +86,7 @@
                 <td>{{ trainer.working_place }}</td>
                 <td>{{ trainer.type }}</td>
                 <td class="text-center">
-                  {% if course.id is not None %}
+                  {% if trainer is not None and course is not None %}
 
                   <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" id="token-trainer">
                   <a class="btn btn-danger" role="button" style="margin: 2px;" ic-action="remove"
@@ -94,11 +94,8 @@
                     ic-delete-from="{% url 'FPT:remove-assign-trainer' course.id trainer.user_id %}">
                     <i class="fas fa-trash"></i>
                   </a>
-                  {% else %}
-                  <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" id="token-trainer">
-                  <a class="btn btn-danger" role="button" style="margin: 2px;">
-                    <i class="fas fa-trash"></i>
-                  </a>
+                   <a href="{% url 'FPT:change-trainer-assign' trainer.user_id %}" class="btn btn-success" role="button"
+                    style="background: rgb(11,171,56);margin: 2px;"><i class="fas fa-pencil-alt"></i></a>
                   {% endif %}
                 </td>
               </tr>
@@ -147,7 +144,7 @@
                 <td>{{ trainee.location }}</td>
                 <td class="text-center">
 
-                  {% if course.id is not None %}
+                  {% if course.id %}
                   <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" id="token-trainee">
                   <a class="btn btn-danger" role="button" style="margin: 2px;" ic-action="remove"
                     ic-target="#row-trainee-{{ trainee.user_id }}" ic-include="#token-trainee"
