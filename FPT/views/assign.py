@@ -221,7 +221,7 @@ def manage_assign(request):
     list_trainees_id = [i.assigned_user_id for i in trainees_assigned]
 
     trainers = Trainer.objects.filter(pk__in=list_trainers_id).exclude(Q(user__is_trainer=False))
-    trainees = Trainee.objects.filter(pk__in=list_trainees_id)
+    trainees = Trainee.objects.filter(pk__in=list_trainees_id).exclude(Q(user__is_trainee=False))
 
     context = {
         "trainers": trainers,

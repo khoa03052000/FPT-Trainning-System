@@ -86,7 +86,7 @@
                 <td>{{ trainer.working_place }}</td>
                 <td>{{ trainer.type }}</td>
                 <td class="text-center">
-                  {% if course.id is not None %}
+                  {% if trainer is not None and course is not None %}
 
                   <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" id="token-trainer">
                   <a class="btn btn-danger" role="button" style="margin: 2px;" ic-action="remove"

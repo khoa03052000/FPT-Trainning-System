@@ -73,6 +73,11 @@ urlpatterns = [
     path('change-profile/', change_profile, name='change-profile'),
     path('update-profile-trainee/', update_profile_trainee, name='update-profile-trainee'),
     path('update-profile-trainer/', update_profile_trainer, name='update-profile-trainer'),
+    path('view-request-assign/', view_request_assign, name='view-request-assign'),
+    path('view-assigned-course/', view_assigned_course, name='view-assigned-course'),
+    path('view-course-assigned-detail/<int:course_id>', view_course_assigned_detail, name='view-course-assigned-detail'),
+    path('request-assign-course/<int:course_id>', request_assign_course, name='request-assign-course'),
+
     # TODO: VIEW COURSE ASSIGN
     # TODO; REQUEST COURSE
 ]

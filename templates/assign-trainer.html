@@ -36,7 +36,8 @@
                   <form action="{% url 'FPT:add-trainers-assign' course.id %}" method="POST">
                     {% csrf_token %}
                     {% for trainer in trainers %}
-                    <tr>
+                        {% if trainer.user.is_trainer %}
+                            <tr>
                         <td>
                           <div class="custom-control custom-checkbox">
                             <input
@@ -57,7 +58,8 @@
                         <td>{{ trainer.working_place }}</td>
                         <td>{{ trainer.type }}</td>
                     </tr>
-                  {% endfor %}
+                        {% endif %}
+                    {% endfor %}
                   <div class="col-12 col-sm-7 col-md-6 text-right" style="margin: 0px; padding: 5px 15px">
                   <button class="btn btn-primary btn-sm reset" type="submit" style="margin: 20px">
                     Submit Add Trainers
