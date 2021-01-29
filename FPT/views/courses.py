@@ -34,7 +34,7 @@ def create_course(request):
 
             check_course = Course.objects.filter(name=request.POST["name"])
             if check_course.exists():
-                messages.warning(request, f"The course with name {check_course.name} is exist")
+                messages.warning(request, f"The course with name {request.POST['name']} is exist")
                 return redirect('FPT:create-course')
 
             upload = CourseCreate(request.POST, request.FILES)
@@ -119,7 +119,7 @@ def update_course(request, course_id):
 
             check_course = Course.objects.filter(name=request.POST["name"])
             if check_course.exists():
-                messages.warning(request, f"The course with name {check_course.name} is exist")
+                messages.warning(request, f"The course with name {request.POST['name']} is exist")
                 return redirect("FPT:course-detail", course_id=course_self.id)
             course_form = CourseCreate(request.POST, request.FILES, instance=course_self)
             if course_form.is_valid():
