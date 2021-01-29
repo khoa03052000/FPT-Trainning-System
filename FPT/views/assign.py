@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
 
@@ -219,7 +220,7 @@ def manage_assign(request):
     list_trainers_id = [i.assigned_user_id for i in trainers_assigned]
     list_trainees_id = [i.assigned_user_id for i in trainees_assigned]
 
-    trainers = Trainer.objects.filter(pk__in=list_trainers_id)
+    trainers = Trainer.objects.filter(pk__in=list_trainers_id).exclude(Q(user__is_trainer=False))
     trainees = Trainee.objects.filter(pk__in=list_trainees_id)
 
     context = {

@@ -31,6 +31,9 @@ class User(AbstractUser):
         elif self.is_trainer:
             self.role = "Trainer"
             self.department = "FPT Education"
+            trainer = Trainer.objects.filter(user=self)
+            if trainer.exists() is False:
+                Trainer.objects.create(user=self)
         elif self.is_trainee:
             self.role = "Trainee"
             self.department = "FPT Education"
