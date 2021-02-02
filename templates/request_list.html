@@ -22,6 +22,9 @@
                                 <th class="text-center">Course Name</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center">Created At</th>
+                                {% if user.is_staff %}
+                                    <th class="text-center">Action</th>
+                                {% endif %}
                             </tr>
                         </thead>
                         <tbody class="text-center">
@@ -34,6 +37,25 @@
                                     </p>
                                 </td>
                                 <td>{{ request_course.created_at }}</td>
+                                {% if user.is_staff %}
+                                    <td class="text-center">
+
+                                    <a class="btn btn-success" href="{% url 'FPT:approve-request' request_course.id %}"
+                                        role="button" style="background: rgb(11,171,56);margin: 2px;"><i
+                                            class="fas fa-check"></i>
+                                    </a>
+                                    <a class="btn btn-warning" href="{% url 'FPT:reject-request' request_course.id %}"
+                                        role="button"
+                                    ><i
+                                            class="fas fa-ban"></i>
+                                    </a>
+
+                                    <a class="btn btn-danger" role="button" style="margin: 2px;"
+                                        href = "{% url 'FPT:remove-request'  request_course.id %}">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                    </td>
+                                {% endif %}
                             </tr>
                             {% endfor %}
                         </tbody>

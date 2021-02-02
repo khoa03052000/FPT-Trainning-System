@@ -138,8 +138,6 @@ class Request(models.Model):
         choices=STATUS_CHOICES,
         default=PENDING,
     )
-    is_permission = models.BooleanField(default=False, null=False)
-    limit_time = models.DateTimeField(blank=True, null=True)
     email = models.EmailField(default="khoa@gmail.com")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -150,13 +148,9 @@ class Request(models.Model):
 
     def save(self, *args, **kwargs):
         if self.status == 'APPROVED':
-            self.is_permission = True
             if self.updated_at is not None:
-                self.limit_time = self.updated_at + timedelta(days=7)
                 return super().save(*args, **kwargs)
         elif self.status == 'REJECTED':
-            self.limit_time = None
-            self.is_permission = False
             return super().save(*args, **kwargs)
         elif self.status == 'CANCELLED':
             self.delete()

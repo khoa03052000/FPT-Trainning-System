@@ -8,6 +8,7 @@ from .views.assign import *
 from .views.accounts import *
 from .views.categories import *
 from .views.register import *
+from .views.requests import *
 from .views.user import *
 
 
@@ -66,6 +67,10 @@ urlpatterns = [
     path('remove-trainer/<int:user_id>/', remove_trainer, name='remove-trainer'),
     path('search-users/', search_users, name='search-users'),
     path('register-users/', register_users, name='register-users'),
+    path('requests-users/', requests_users, name='requests-users'),
+    path('approve-request/<int:request_id>', approve_request, name='approve-request'),
+    path('reject-request/<int:request_id>', reject_request, name='reject-request'),
+    path('remove-request/<int:request_id>', remove_request, name='remove-request'),
 
     # User
     path('change-password/', change_password, name='change-password'),

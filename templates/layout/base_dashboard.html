@@ -53,6 +53,10 @@
                         <a class="nav-link" href="{% url 'FPT:register-users' %}"><i
                                 class="fas fa-user-circle"></i><span>Register User</span></a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'FPT:requests-users' %}"><i
+                                class="fas fa-mail-bulk"></i><span>Requests Course</span></a>
+                    </li>
                     {% endif %}
                     {% if user.is_trainer %}
                     <li class="nav-item">
